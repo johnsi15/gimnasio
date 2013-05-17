@@ -55,8 +55,11 @@ $(document).ready(function(){
                        }else{
                              $('#verEstu').empty();//limpiar la tabla...
                              $('#verEstu').html(resp);
+                             /*____________________________*/
+                             $('#verDatos').empty();
+                             $('#verDatos').html(resp);
                              $('#deleteReg').dialog('close');
-                             setTimeout(function(){ $(".mensaje .alert").fadeOut(800).fadeIn(800).fadeOut(500).fadeIn(500).fadeOut(300);}, 800); 
+                             setTimeout(function(){ $("#mensaje .alert").fadeOut(800).fadeIn(800).fadeOut(500).fadeIn(500).fadeOut(300);}, 1000); 
                              var exito = '<div class="alert alert-success">'+'<button type="button" class="close" data-dismiss="alert">'+'X'+'</button>'+'<strong>'+'Registro Eliminado '+'</strong>'+' el registro se Elimino correctamente'+'</div>';
                              $('#mensaje .alert').remove();
                              $('#mensaje').html(exito);

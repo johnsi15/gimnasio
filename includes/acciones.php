@@ -2,6 +2,7 @@
     require_once('funciones.php');
     $objeto = new funciones();
     $refres = new funciones();
+
    //login de usuarios
    if(isset($_POST['clave'])){
         $user = $_POST['nombre'];
@@ -14,6 +15,8 @@
         	echo "Error";
         }
    }
+
+
    /*registrar un nuevo estudiante al gim*/
    if(isset($_POST['registrarEstudiante'])){
         $nom = $_POST['nombre'];
@@ -28,6 +31,8 @@
         $objeto->registrarEstudiante($nom,$edad,$peso,$altura,$fechaI,$fechaV,$pago,$con);
         $objeto->verEstudiantes();
    }
+
+
    /*modificamos el pago de algunos de los estudiantes */
    if(isset($_POST['modificarPago'])){
         $cod = $_POST['id_registro'];
@@ -37,6 +42,8 @@
         $objeto->verEstudiantes();
         //$objeto->verVensiminetos();
    }
+
+
    /*modificamos el pago de los que les vencio las fechas */
    if(isset($_POST['modificarPagoVen'])){
         $cod = $_POST['id_registroVen'];
@@ -45,19 +52,47 @@
         $objeto->modificarPago($pago,$con,$cod);
         $objeto->verVensimientos();
    }
+
+
    /*refrescar la tabla al cerrar la ventana de los que se les vencio las fechas de pago*/
    if(isset($_POST['verEstu'])){
        $objeto->verEstudiantes();
    }
 
-   if(isset($_POST['okRecar'])){
-        $base = $_POST['base'];
-        $tipoB = $_POST['tipoBase'];
-        date_default_timezone_set('America/Bogota'); 
-        $fecha = date("Y-m-d");
-        $objeto->actualizarBase($fecha,$base,$tipoB);
-        header('Location: recargas.php');
+
+   if(isset($_POST['deleteEstudiante'])){
+       $cod = $_POST['id_delete'];
+       $objeto->eliminarEstudiante($cod);
+       $objeto->verTodosEstudiantes();
    }
+
+   if(isset($_POST['deleteEstudianteMenu'])){
+       $cod = $_POST['id_delete'];
+       $objeto->eliminarEstudiante($cod);
+       $objeto->verEstudiantes();
+   }
+
+
+/*aca comienzo con el codigo para modificar los datos personales de los estudiantes que van al gimnacio*/
+   if(isset($_POST['modificarDatos'])){
+        $cod = $_POST['id_registro'];
+        $nom = $_POST['nombre'];
+        $edad = $_POST['edad'];
+        $peso = $_POST['peso'];
+        $altura = $_POST['altura'];
+        $objeto->actualizarDatosPersonales($cod,$nom,$edad,$peso,$altura);
+        $objeto->verTodosEstudiantes();
+   }
+
+   /*buscador en tiempo real......*/
+   if(isset($_POST['query'])){
+       $palabra = $_POST['query'];
+       $objeto->buscarEstudiante($palabra);
+   }
+
+
+
+/*codigo viejo_______________________________________________________________________*/
 
    if(isset($_POST['guardarRecar'])){
         $nombre = $_POST['nombre'];
@@ -228,11 +263,7 @@
       $fecha2 = $_POST['fecha2'];
       $objeto->calcularGasto($fecha1,$fecha2);
    }
-    /*buscador en tiempo real......*/
-   if(isset($_POST['query'])){
-       $palabra = $_POST['query'];
-       $objeto->buscarConcepto($palabra);
-   }
+  
 
    if(isset($_POST['buscarInternet'])){
        $palabra = $_POST['buscarInternet'];

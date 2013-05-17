@@ -149,25 +149,42 @@ $(document).ready(function(){
 
 
     /*___________________________________________________________________*/
+    $('#editarDatos').dialog({//con esto cargamos los formulario de los gastos y de los cierre no es necesario repetir el codigo
+            autoOpen: false,
+            modal: true,
+            width:250,
+            height:'auto',
+            resizable: false,
+            close:function(){
+                  $('#id_registro').val('0');
+            }
+      });
+     
+     /*cerrar ventana de modificar ventana de fechas vencimientos*/
+      $('body').on('click','#cancelar',function(e){
+         e.preventDefault();
+         $('#editarDatos').dialog('close');
+      });
 
-    /*EDITAR NOMBRE DE USUARIOOOO*/
-    $('body').on('click','#editNomUser',function(e){
+    /*editar datos personales*/
+    $('body').on('click','#editEstudiante',function(e){
             e.preventDefault();
            // alert($(this).attr('href'));
             $('#id_registro').val($(this).attr('href'));
             //abreimos el formulario
-            $('#formulario').dialog('open');
+            $('#editarDatos').dialog('open');
             //estraemos los campos.
-            $('#nombre').val($(this).parent().parent().children('td:eq(1)').text());
+            $('#nombre').val($(this).parent().parent().children('td:eq(0)').text());
+            $('#edad').val($(this).parent().parent().children('td:eq(1)').text());
+            $('#peso').val($(this).parent().parent().children('td:eq(2)').text());
+            $('#altura').val($(this).parent().parent().children('td:eq(3)').text());
             //$('#dinero').val($(this).parent().parent().children('td:eq(0)').text());
      });
 
-    $('body').on('click','#UserCancelar',function(e){
-       e.preventDefault();
-       $('#formulario').dialog('close');
-    });
+    var pet = $('#editarDatos form').attr('action');
+    var met = $('#editarDatos form').attr('method');
 
-    $('#formulario form').on('click','#UserModificar',function(e){
+    $('#editarDatos form').on('click','#modificarDatos',function(e){
                 e.preventDefault();
 
                 $.ajax({
@@ -176,18 +193,18 @@ $(document).ready(function(){
                   },
                   url: pet,
                   type: met,
-                  data: $('#formulario form').serialize(),
+                  data: $('#editarDatos form').serialize(),
                   success: function(resp){
                         console.log(resp);
                         if(resp == "Error"){
 
                         }else{
-                              //$('#resul').empty();//quitamos los que hay
-                              $('#resul').html(resp);
-                              $('#formulario').dialog('close');
-                              setTimeout(function(){ $(".mensaje .alert").fadeOut(800).fadeIn(800).fadeOut(500).fadeIn(500).fadeOut(300);}, 800); 
+                              $('#verDatos').empty();//limpiamos la tabla 
+                              $('#verDatos').html(resp);//mandamos los nuevos datos a la tabla
+                              $('#editarDatos').dialog('close');
+                              setTimeout(function(){ $("#mensaje .alert").fadeOut(800).fadeIn(800).fadeOut(500).fadeIn(500).fadeOut(300);}, 800); 
                               var exito = '<div class="alert alert-info">'+'<button type="button" class="close" data-dismiss="alert">'+'X'+'</button>'+'<strong>'+'Modificado '+'</strong>'+' el registro se modifico correctamente'+'</div>';
-                              $('.mensaje').html(exito);
+                              $('#mensaje').html(exito);
                              // $('#paginacion').empty();//limpiar los datos
                               //$('#paginacion').load('paginacion.php');
                         }

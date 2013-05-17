@@ -29,34 +29,19 @@ footer{
 #cabeza {
     height: 200px;
 }
- 
-#menu-contenedor {
-    height: 50px;
+#IrInicio:hover{
+    text-decoration: underline;
 }
- 
-ul#menu {
-    padding: 0;
-    height: 50px;
+#IrInicio:link{
+    text-decoration: none;
 }
- 
-ul#menu li {
-    display: inline-block;
-}
- 
-ul#menu li a {
-    padding: 0 10px;
-    display: block;
-    line-height: 50px;
-}
- 
-#contenido {
-    height: 700px;
-}
- 
-.menu-fijo {
+
+.bloqueFijo{
     position: fixed;
-    top: 0;
-    width: 900px;
+    top: 250px;
+    padding-top: 25px;
+    line-height: 20px;
+    width: 140px;
 }
 
 /* Responsive Desing */

@@ -189,7 +189,16 @@
 									</ul>
 								</li>
 							<li class="divider-vertical"></li>
-							<li><a href="includes/recargas.php">Estudiantes</a></li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									Estudiantes
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu">
+									<li><a href="includes/actualizarDatos.php">Actualizar Datos Personales</a></li>
+									<li><a href="">Actualizar Tiempo</a></li>
+								</ul>
+							</li>
 							<li class="divider-vertical"></li>
 							<li><a href="includes/minutos.php"><i class="icon-book icon-white"></i> Reporte</a></li>
 							<li class="divider-vertical"></li>
@@ -318,7 +327,7 @@
 	    		<label for="activoElim" class="alert alert-danger">
 	    		    <strong>Esta seguro de Eliminar este estudiante</strong><br>
 	    		</label>
-	    		<input type="hidden" name="deleteEstudiante"/> 
+	    		<input type="hidden" name="deleteEstudianteMenu"/> 
 			    <button type="submit" class="btn btn-success">Aceptar</button>
 			    <button id="cancelar" name="cancelar" class="btn btn-danger">Cancelar</button>
 	    	</div>
@@ -332,7 +341,7 @@
 			?>
 			<div id="aviso" class="container well">
 				<div id="cerrar"><a class="btn btn-inverse cerrar">X</a></div>
-					<h1 style='color: #df0024;'>Se les vencio el tiempo</h1><br>
+					<h1 style='color: #df0024;'>Deben Pagar</h1><br>
 				<table  class="table table-hover table-bordered">
 					<thead>
 						<tr>
