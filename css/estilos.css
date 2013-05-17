@@ -1,0 +1,91 @@
+/* Para evitar margenes y espacios */
+* { margin: 0; padding: 0;
+  font-family: Arial;
+ }
+
+body{
+    /*background: rgba(153,150,50,0.4);*/
+    /*background: rgba(130,112,54,0.5);*/
+    /*background: rgba(206,176,131,0.5);*/
+    background: rgba(7,7,7,0.6);
+    /* background: rgba(73, 59, 42, 0.8); */
+    padding-top: 60px;
+    padding-bottom: 40px;
+}
+
+footer{
+   padding-top: 5px;
+   padding-bottom: 25px;
+   background: rgba(255,255,255,0.8);
+   bottom:0!important;
+   margin-bottom: -50px;
+}
+
+#pie{
+    text-align: center;
+    font-weight: bold;
+}
+
+#cabeza {
+    height: 200px;
+}
+ 
+#menu-contenedor {
+    height: 50px;
+}
+ 
+ul#menu {
+    padding: 0;
+    height: 50px;
+}
+ 
+ul#menu li {
+    display: inline-block;
+}
+ 
+ul#menu li a {
+    padding: 0 10px;
+    display: block;
+    line-height: 50px;
+}
+ 
+#contenido {
+    height: 700px;
+}
+ 
+.menu-fijo {
+    position: fixed;
+    top: 0;
+    width: 900px;
+}
+
+/* Responsive Desing */
+/* media queries para hero-unit h1 */
+@media all and (max-width: 480px){
+    .hero-unit h1{
+        font-size: 40px;
+    }
+
+    .respon{
+        width: 150px;
+    }
+
+    #centrar{
+        font-size: 20px;
+    }
+
+    #centrar img{
+        max-width: 25px;
+        max-height: 25px;
+    }
+
+    #form{
+        margin-left: 5%;
+    }
+}
+
+@media all and (max-width: 1024px){
+    .respon{
+        width: 140px;
+    }
+}
