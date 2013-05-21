@@ -34,7 +34,6 @@
 	    p{
 	    	color: #df0024;
 	    	font-size: 20px;
-	    	text-align: right;
 	    }
 	    textarea{
 	    	/*resize: none;*/
@@ -45,17 +44,11 @@
 	    	background: #feffff;
 	       	/* box-shadow:inset -3px -2px 37px #000000; */
 	    }
-	    #validate2{
-		    margin-left: 17%;
-		}
-		#userEdit{
-			font-weight: bold;
-		}
-	    .notas{
-	    	margin-left: 80px;
-	    	position: fixed;
-	    	top: 190px;
-	    }
+	    #mensaje{
+	        float: left;
+	        margin-left: 480px;
+	        position: fixed;
+       	}
         .hero-unit{
         	margin-top: 30px;
         	text-align: center;
@@ -65,19 +58,15 @@
 
 	<script>
       $(document).ready(function(){
-		  var menu = $('#menu');
-		  var contenedor = $('#menu-contenedor');
-		  var menu_offset = menu.offset();
-		  // Cada vez que se haga scroll en la página
-		  // haremos un chequeo del estado del menú
-		  // y lo vamos a alternar entre 'fixed' y 'static'.
-		  $(window).on('scroll', function() {
-		    if($(window).scrollTop() > menu_offset.top) {
-		      menu.addClass('menu-fijo');
-		    } else {
-		      menu.removeClass('menu-fijo');
-		    }
-		  });
+		    /*______________________________________________*/
+        $("#menuOpen").mouseout(function(){
+            //$("#formMenu").removeClass('open');
+	    }).mouseover(function(){
+	        $("#formMenu").addClass('open');
+	        $("#foco").focus();
+        });
+
+
 	  });//cierre del document
 	</script>
 
@@ -105,11 +94,51 @@
 					<div class="nav-collapse collapse">
 						<ul class="nav" >
 							<li class="divider-vertical"></li>
-							<li class="active"><a href="../menu.php"><i class="icon-home icon-white"></i>Inicio</a></li>
+							<li><a href="../menu.php"><i class="icon-home icon-white"></i>Inicio</a></li>
 							<li class="divider-vertical"></li>
-							<li><a href="internet.php">Registrar</a></li>
+							<li id="formMenu" class="dropdown">
+									<a id="menuOpen" class="dropdown-toggle" data-toggle="dropdown">
+										Registrar
+										<span class="caret"></span>
+									</a>
+								<ul class="dropdown-menu pull-right">
+									<div class="span4" id="registrarNew">
+										<form action="acciones.php" method="post" id="registrarEstudiante" style="margin-left: 30px;" class="limpiar">
+											<label>Nombre:</label>
+											<input type="text" name="nombre" id="foco" autofocus required/>
+											<label>Edad:</label>
+											<input type="text" name="edad" required/>
+											<label>Peso - Kg:</label>
+											<input type="text" name="peso" required/>
+											<label>Altura - M:</label>
+											<input type="text" name="altura" required/>
+											<label>Fecha Vencimiento:</label>
+											<input type="date" name="fecha2" required/>
+											<label>Pago:</label>
+											<input type="text" name="pago" value="0"/>
+											<label>Condición:</label>
+											<select name="condicion" id="recar">
+							    				<option value="No Pago">No Pago</option>
+							    				<option value="Pago">Pago</option>
+							    				<option value="Abono">Abono</option>
+							    			</select>
+							    			<input type="hidden" name="registrarEstudiante">
+							    			<button type="submit" class="btn btn-success">Registrar</button>
+										</form>
+									</div>
+								</ul>
+							</li>
 							<li class="divider-vertical"></li>
-							<li><a href="recargas.php">Estudiantes</a></li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									Estudiantes
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu">
+									<li><a href="actualizarDatos.php">Actualizar Datos Personales</a></li>
+									<li><a href="actualizarTiempo.php">Actualizar Tiempo</a></li>
+								</ul>
+							</li>
 							<li class="divider-vertical"></li>
 							<li><a href="minutos.php"><i class="icon-book icon-white"></i> Reporte</a></li>
 							<li class="divider-vertical"></li>
@@ -120,11 +149,17 @@
 								</a>
 								<ul class="dropdown-menu">
 									<li><a href="registrarUsuario.php"><i class="icon-plus-sign"></i> Registrar Usuario</a></li>
-									<li><a href="#"><i class="icon-wrench"></i> Configuración de la cuenta</a></li>
+									<li class="active"><a href="#"><i class="icon-wrench"></i> Configuración de la cuenta</a></li>
 									<li class="divider"></li>
 									<li><a href="includes/cerrar.php">Cerrar Sesion</a></li>
 								</ul>
 							</li>
+							<li class="divider-vertical"></li>
+							<?php 
+								date_default_timezone_set('America/Bogota'); 
+						        $fecha = date("Y-m-d");
+						        echo '<li><a href="#" style="font-weight: bold;">Hoy es: '.$fecha.'</a></li>';
+					        ?>
 						</ul>
 					</div>
 				</div>
@@ -209,11 +244,9 @@
      		</div>
      	</form>
      </div>
-	<footer class="container well">
-		<div class="span7">
-		   <h2><img src="../img/copyright.png" alt="Autor"> John Andrey Serrano - 2013</h2>
-		</div>
-		<div class="span4"> <br>
+	<footer>
+		<h2 id="pie"><img src="../img/copyright.png" alt="Autor"> John Andrey Serrano - 2013</h2>
+		<div id="pie"> <br>
 			<p>Gim Version 1.0</p>
 		</div>
 	</footer>

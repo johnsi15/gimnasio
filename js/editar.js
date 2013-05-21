@@ -1,6 +1,6 @@
 $(document).ready(function(){
-	/*EDITAR O MODIFICAR DATOS DEL CIERRE DEL DIA.....*/
-	 $('#editarPago').dialog({//con esto cargamos los formulario de los gastos y de los cierre no es necesario repetir el codigo
+
+	    $('#editarPago').dialog({//con esto cargamos los formulario de los gastos y de los cierre no es necesario repetir el codigo
             autoOpen: false,
             modal: true,
             width:280,
@@ -10,8 +10,8 @@ $(document).ready(function(){
                   $('#id_registro').val('0');
             }
       });
-   
-      /*cerrar ventana de modificar*/
+     
+     /*cerrar ventana de modificar ventana de fechas vencimientos*/
       $('body').on('click','#cancelar',function(e){
          e.preventDefault();
          $('#editarPago').dialog('close');
@@ -20,9 +20,9 @@ $(document).ready(function(){
       //editar Registro
       $('body').on('click','#editPago',function(e){
             e.preventDefault();
-      	// alert($(this).attr('href'));
-      	$('#id_registro').val($(this).attr('href'));
-      	//abreimos el formulario
+        // alert($(this).attr('href'));
+       $('#id_registro').val($(this).attr('href'));
+        //abreimos el formulario
             $('#editarPago').dialog('open');
             //estraemos los campos.
             $('#nombre').val($(this).parent().parent().children('td:eq(0)').text());
@@ -31,47 +31,43 @@ $(document).ready(function(){
             $('#con option[value="'+condicion+'"]').attr('selected',true);
       });
 
-      /*aca cargo la peticon y el metodo para ambos casos no es necesario repetir el codigo*/
       var pet = $('#editarPago form').attr('action');
       var met = $('#editarPago form').attr('method');
 
-      /*metodo ajax para modificar el cierre*/
       $('#editarPago form').on('click','#modificarPago',function(e){
-      	    e.preventDefault();
+            e.preventDefault();
+          $.ajax({
+              beforeSend: function(){
 
-      	    $.ajax({
-      	    	beforeSend: function(){
+              },
+              url: pet,
+              type: met,
+              data: $('#editarPago form').serialize(),
+              success: function(resp){
+                console.log(resp);
+                if(resp == "Error"){
 
-      	    	},
-      	    	url: pet,
-      	    	type: met,
-      	    	data: $('#editarPago form').serialize(),
-      	    	success: function(resp){
-      	    		//console.log(resp);
-      	    		if(resp == "Error"){
-
-      	    		}else{
-      	    			$('#verEstu').empty();//limpiar los datos
-      	    			$('#verEstu').html(resp);
-      	    			$('#editarPago').dialog('close');
-      	    			setTimeout(function(){ $("#mensaje .alert").fadeOut(800).fadeIn(800).fadeOut(500).fadeIn(500).fadeOut(300);}, 1000); 
+                }else{
+                  $('#verEstu').empty();//limpiamos la tabla
+                  $('#verEstu').html(resp);
+                  $('#editarPago').dialog('close');
+                  setTimeout(function(){ $("#mensaje .alert").fadeOut(800).fadeIn(800).fadeOut(500).fadeIn(500).fadeOut(300);}, 800); 
                               var exito = '<div class="alert alert-info">'+'<button type="button" class="close" data-dismiss="alert">'+'X'+'</button>'+'<strong>'+'Modificado '+'</strong>'+' el registro se modifico correctamente'+'</div>';
-      	    			$('#mensaje').html(exito);
+                  $('#mensaje').html(exito);
                              // $('#paginacion').empty();//limpiar los datos
                               //$('#paginacion').load('paginacion.php');
-      	    		}
-      	    	},
-      	    	error: function(jqXHR,estado,error){
-      	    		console.log(estado);
-      	    		console.log(error);
-      	    	},
-      	    	complete: function(jqXHR,estado){
-      	    		console.log(estado);
-      	    	},
-      	    	timeout: 10000 //10 segundos.
-      	    });
-      });
-
+                }
+              },
+              error: function(jqXHR,estado,error){
+                console.log(estado);
+                console.log(error);
+              },
+              complete: function(jqXHR,estado){
+                console.log(estado);
+              },
+              timeout: 10000 //10 segundos.
+        });
+  });
 
 
 
@@ -146,10 +142,9 @@ $(document).ready(function(){
 
 
 
-
-
+/*este es el codigo para modificar los datos personales de los estudiantes del gim ok*/
     /*___________________________________________________________________*/
-    $('#editarDatos').dialog({//con esto cargamos los formulario de los gastos y de los cierre no es necesario repetir el codigo
+    $('#editarDatos').dialog({
             autoOpen: false,
             modal: true,
             width:250,
@@ -181,8 +176,9 @@ $(document).ready(function(){
             //$('#dinero').val($(this).parent().parent().children('td:eq(0)').text());
      });
 
-    var pet = $('#editarDatos form').attr('action');
-    var met = $('#editarDatos form').attr('method');
+    
+    var peticion = $('#editarDatos form').attr('action');
+    var metodo = $('#editarDatos form').attr('method');
 
     $('#editarDatos form').on('click','#modificarDatos',function(e){
                 e.preventDefault();
@@ -191,8 +187,8 @@ $(document).ready(function(){
                   beforeSend: function(){
 
                   },
-                  url: pet,
-                  type: met,
+                  url: peticion,
+                  type: metodo,
                   data: $('#editarDatos form').serialize(),
                   success: function(resp){
                         console.log(resp);
@@ -218,8 +214,158 @@ $(document).ready(function(){
                   },
                   timeout: 10000 //10 segundos.
                 });
+    });
+
+
+/*aca va el codigo para actualizaar el tiempo de los estudiantes que ya pagaron*/
+/*_______________________________________________________________________________*/
+
+      $('#actulizarTiempo').dialog({
+            autoOpen: false,
+            modal: true,
+            width:250,
+            height:'auto',
+            resizable: false,
+            close:function(){
+                  $('#id_registro').val('0');
+            }
       });
-/*________________________________________________________________-*/
+     
+     /*cerrar ventana de modificar ventana de fechas vencimientos*/
+      $('body').on('click','#cancelar',function(e){
+         e.preventDefault();
+         $('#actulizarTiempo').dialog('close');
+      });
+
+    /*editar datos personales*/
+    $('body').on('click','#tiempoEstudiante',function(e){
+            e.preventDefault();
+           // alert($(this).attr('href'));
+            $('#id_registro').val($(this).attr('href'));
+            //abreimos el formulario
+            $('#actulizarTiempo').dialog('open');
+            //estraemos los campos.
+            $('#nombre').val($(this).parent().parent().children('td:eq(0)').text());
+           // $('#pago').val($(this).parent().parent().children('td:eq(3)').text());
+            //var condicion =$(this).parent().parent().children('td:eq(4)').text();
+            //$('#con option[value="'+condicion+'"]').attr('selected',true);
+            //$('#dinero').val($(this).parent().parent().children('td:eq(0)').text());
+     });
+
+    
+    var peticionTiempo = $('#actulizarTiempo form').attr('action');
+    var metodoTiempo = $('#actulizarTiempo form').attr('method');
+
+    $('#actulizarTiempo form').on('click','#modificarTiempo',function(e){
+                e.preventDefault();
+
+                $.ajax({
+                  beforeSend: function(){
+
+                  },
+                  url: peticionTiempo,
+                  type: metodoTiempo,
+                  data: $('#actulizarTiempo form').serialize(),
+                  success: function(resp){
+                        console.log(resp);
+                        if(resp == "Error"){
+
+                        }else{
+                              $('#verDatos').empty();//limpiamos la tabla 
+                              $('#verDatos').html(resp);//mandamos los nuevos datos a la tabla
+                              $('#actulizarTiempo').dialog('close');
+                              setTimeout(function(){ $("#mensaje .alert").fadeOut(800).fadeIn(800).fadeOut(500).fadeIn(500).fadeOut(300);}, 800); 
+                              var exito = '<div class="alert alert-info">'+'<button type="button" class="close" data-dismiss="alert">'+'X'+'</button>'+'<strong>'+'Modificado '+'</strong>'+' el registro se modifico correctamente'+'</div>';
+                              $('#mensaje').html(exito);
+                             // $('#paginacion').empty();//limpiar los datos
+                              //$('#paginacion').load('paginacion.php');
+                        }
+                  },
+                  error: function(jqXHR,estado,error){
+                        console.log(estado);
+                        console.log(error);
+                  },
+                  complete: function(jqXHR,estado){
+                        console.log(estado);
+                  },
+                  timeout: 10000 //10 segundos.
+                });
+    });
+
+
+
+
+
+
+
+
+
+
+
+/*EDITAR NOMBRE DE USUARIOOOO*/
+      $('#formulario').dialog({
+            autoOpen: false,
+            modal: true,
+            width:280,
+            height:'auto',
+            resizable: false,
+            close:function(){
+                  $('#id_registro').val('0');
+            }
+      });
+
+    $('body').on('click','#editNomUser',function(e){
+            e.preventDefault();
+           // alert($(this).attr('href'));
+            $('#id_registro').val($(this).attr('href'));
+            //abreimos el formulario
+            $('#formulario').dialog('open');
+            //estraemos los campos.
+            $('#nombre').val($(this).parent().parent().children('td:eq(1)').text());
+            //$('#dinero').val($(this).parent().parent().children('td:eq(0)').text());
+     });
+
+    $('body').on('click','#UserCancelar',function(e){
+       e.preventDefault();
+       $('#formulario').dialog('close');
+    });
+
+    $('#formulario form').on('click','#UserModificar',function(e){
+                e.preventDefault();
+
+                $.ajax({
+                  beforeSend: function(){
+
+                  },
+                  url: pet,
+                  type: met,
+                  data: $('#formulario form').serialize(),
+                  success: function(resp){
+                        console.log(resp);
+                        if(resp == "Error"){
+
+                        }else{
+                              //$('#resul').empty();//quitamos los que hay
+                              $('#resul').html(resp);
+                              $('#formulario').dialog('close');
+                              setTimeout(function(){ $(".mensaje .alert").fadeOut(800).fadeIn(800).fadeOut(500).fadeIn(500).fadeOut(300);}, 800); 
+                              var exito = '<div class="alert alert-info">'+'<button type="button" class="close" data-dismiss="alert">'+'X'+'</button>'+'<strong>'+'Modificado '+'</strong>'+' el registro se modifico correctamente'+'</div>';
+                              $('.mensaje').html(exito);
+                             // $('#paginacion').empty();//limpiar los datos
+                              //$('#paginacion').load('paginacion.php');
+                        }
+                  },
+                  error: function(jqXHR,estado,error){
+                        console.log(estado);
+                        console.log(error);
+                  },
+                  complete: function(jqXHR,estado){
+                        console.log(estado);
+                  },
+                  timeout: 10000 //10 segundos.
+                });
+      });
+/*________________________________________________________________*/
 
 /*MODIFICAR CONTRASEÑA DE LOS USUARIOS*/
       $('#formularioContraseña').dialog({//con esto cargamos los formulario de los gastos y de los cierre no es necesario repetir el codigo

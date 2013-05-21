@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title>Actualizar datos</title>
+	<title>Actualizar tiempo</title>
 	<link rel="stylesheet" href="../css/bootstrap.css">
 	<link rel="stylesheet" href="../css/smoothness/jquery-ui.css">
 	<link rel="stylesheet" href="../css/estilos.css">
@@ -44,6 +44,9 @@
 	        margin-left: 480px;
 	        position: fixed;
        	}
+		#resulVitrina{
+			margin-left: 6%;
+		}
         .hero-unit{
         	margin-top: 30px;
         	text-align: center;
@@ -90,9 +93,9 @@
 
 	    /*_______________________________________________*/
 	    $('#buscar').live('keyup',function(){
-		  	var data = 'query='+$(this).val();
+		  	var data = 'queryTiempo='+$(this).val();
 		  	//console.log(data);
-      	    if(data =='query=' ){
+      	    if(data =='queryTiempo=' ){
       	       	$.post('acciones.php',data , function(resp){
 			  	   	//console.log(resp);
 			  	   	$('#verDatos').empty();//limpiar los datos
@@ -201,8 +204,8 @@
 									<span class="caret"></span>
 								</a>
 								<ul class="dropdown-menu">
-									<li class="active"><a href="#">Actualizar Datos Personales</a></li>
-									<li><a href="actualizarTiempo.php">Actualizar Tiempo</a></li>
+									<li><a href="actualizarDatos.php">Actualizar Datos Personales</a></li>
+									<li class="active"><a href="#">Actualizar Tiempo</a></li>
 								</ul>
 							</li>
 							<li class="divider-vertical"></li>
@@ -248,22 +251,23 @@
 	<section class="container well" id="fondo">
 		<input type="text" name="buscar" id="buscar" class="search-query" placeholder="Buscar Nombre" autofocus>	
 		<div class="row">
-			<h1>Actualizar datos Personales</h1> <br>
+			<h1>Actualizar tiempo</h1> <br>
 			<div class="span12">
 				<table class="table table-hover table-bordered">
 					<thead>
 						<tr>
 							<th>Nombre</th>
-							<th>Edad</th>
-							<th>Peso(Kg)</th>
-							<th>Altura(M)</th>
+							<th>Fecha Inicial</th>
+							<th>Fecha Vencimiento</th>
+							<th>Pago</th>
+							<th>Condición</th>
 						</tr>
 					</thead>
 					<tbody id="verDatos" style="text-aling:center;">
 						<?php
 						    require_once('funciones.php');
 						   	$objeto = new funciones();
-						   	$objeto->verTodosEstudiantes();
+						   	$objeto->verActualizarTiempo();
 						 ?>
 					</tbody>
 				</table>
@@ -272,7 +276,7 @@
 		    	 	 <?php 
 		    	 	  require_once('funciones.php');
 		    	 	  $objeto = new funciones();
-		    	 	  $objeto->paginacionDatosPersonales();
+		    	 	  $objeto->paginacionActulizarTiempo();
 			    	 ?>
 		    	</div>
 			</div>
@@ -283,19 +287,22 @@
 	</section>
 
 	<!--codigo para modificar los campos personales-->
-	<div class="hide" id="editarDatos" title="Editar Registro">
+	<div class="hide" id="actulizarTiempo" title="Editar Registro">
      	<form action="acciones.php" method="post">
      		<input type="hidden" id="id_registro" name="id_registro" value="0">
      			<label>Nombre:</label>
-				<input type="text" name="nombre" id="nombre" autofocus/>
-     			<label>Edad:</label>
-				<input type="text" name="edad" id="edad"/>
-				<label>Peso:</label>
-				<input type="text" name="peso" id="peso">
-				<label>Altura:</label>
-				<input type="text" name="altura" id="altura">
-				<input type="hidden" name="modificarDatos">
-				<button type="submit" id="modificarDatos" class="btn btn-success">Modificar</button>
+				<input type="text" name="nombre" id="nombre" disabled/>
+     			<label>Fecha Vencimiento:</label>
+				<input type="date" name="fechaV" id="fechaV" autofocus/>
+				<label>Pago:</label>
+				<input type="text" name="pago" id="pago" value="0">
+				<select name="condicion" id="con">
+					<option value="No Pago">No Pago</option>
+					<option value="Pago">Pago</option>
+					<option value="Abono">Abono</option>
+				</select>
+				<input type="hidden" name="modificarTiempo">
+				<button type="submit" id="modificarTiempo" class="btn btn-success">Modificar</button>
 				<button id="cancelar" class="btn btn-danger">Cancelar</button>
      	</form>
     </div>
@@ -310,7 +317,7 @@
 	    		<label for="activoElim" class="alert alert-danger">
 	    		    <strong>Esta seguro de Eliminar este estudiante</strong><br>
 	    		</label>
-	    		<input type="hidden" name="deleteEstudiante"/> 
+	    		<input type="hidden" name="deleteEstudianteTiempo"/> 
 			    <button type="submit" class="btn btn-success">Aceptar</button>
 			    <button id="cancelar" name="cancelar" class="btn btn-danger">Cancelar</button>
 	    	</div>

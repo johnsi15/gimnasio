@@ -166,7 +166,6 @@
         }else{//se activara si la variable $num_pag ha resivido un valor oasea se encuentra en la pagina 2 o ha si susecivamente 
             $inicio = ($num_pag-1)*$cant_reg;//si la pagina seleccionada es la numero 2 entonces 2-1 es = 1 por 10 = 10 empiesa a contar desde la 10 para la pagina 2 ok.
         }
-        
         $resultado = mysql_query("SELECT * FROM estudiantes LIMIT $inicio,$cant_reg");
         while($fila = mysql_fetch_array($resultado)){
               echo '<tr> 
@@ -200,7 +199,7 @@
      //BUSCADOR EN TIEMPO REAL POR  DE CONCEPTO......
     public function buscarEstudiante($palabra){
         if($palabra == ''){
-            $cant_reg = 30;//definimos la cantidad de datos que deseamos tenes por pagina.
+            $cant_reg = 10;//definimos la cantidad de datos que deseamos tenes por pagina.
 
             if(isset($_GET["pagina"])){
                 $num_pag = $_GET["pagina"];//numero de la pagina
@@ -292,6 +291,136 @@
             } ;echo '
                    </div>';
     }
+
+/*codigo para actulizar el tiempo del estudiante en el gim...... VA VERDATOS, PAGINACION DE LOS DATOS*/
+    public function verActualizarTiempo(){
+        $resultado = mysql_query("SELECT * FROM estudiantes WHERE condicion='Pago' ORDER BY fechaFinal DESC");
+
+        while($fila = mysql_fetch_array($resultado)){
+                 echo '<tr class="success"> 
+                         <td>'.$fila['nombre'].'</td>
+                         <td>'.$fila['fechaInicial'].'</td>
+                         <td>'.$fila['fechaFinal'].'</td>
+                         <td>'.$fila['dinero'].'</td>
+                         <td>'.$fila['condicion'].'</td>
+                         <td><a id="tiempoEstudiante" class="btn btn-mini btn-info" href="'.$fila['id'].'"><strong>Editar</strong></a></td>
+                         <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['id'].'"><strong>Eliminar</strong></a></td>
+                     </tr>';
+                          // echo $salida;
+        }      
+    }
+
+    public function paginacionActulizarTiempo(){
+         $cant_reg = 10;//definimos la cantidad de datos que deseamos tenes por pagina.
+
+            if(isset($_GET["pagina"])){
+                $num_pag = $_GET["pagina"];//numero de la pagina
+            }else{
+                $num_pag = 1;
+            }
+
+            if(!$num_pag){//preguntamos si hay algun valor en $num_pag.
+                $inicio = 0;
+                $num_pag = 1;
+
+            }else{//se activara si la variable $num_pag ha resivido un valor oasea se encuentra en la pagina 2 o ha si susecivamente 
+                $inicio = ($num_pag-1)*$cant_reg;//si la pagina seleccionada es la numero 2 entonces 2-1 es = 1 por 10 = 10 empiesa a contar desde la 10 para la pagina 2 ok.
+            }
+
+            $result = mysql_query("SELECT * FROM estudiantes WHERE condicion='Pago'");///hacemos una consulta de todos los datos de cinternet
+           
+            $total_registros=mysql_num_rows($result);//obtenesmos el numero de datos que nos devuelve la consulta
+
+            $total_paginas = ceil($total_registros/$cant_reg);
+
+            echo '<div class="pagination" style="display: none;">
+                    ';
+            if(($num_pag+1)<=$total_paginas){//preguntamos si el numero de la pagina es menor o = al total de paginas para que aparesca el siguiente
+                
+                echo "<ul><li class='next'> <a href='actualizarDatos.php?pagina=".($num_pag+1)."'> Next </a></li></ul>";
+            } ;echo '
+                   </div>';
+    }
+
+    /*buscador en tiempo real para actulizar el tiempo de uso de los estudiantes que ya pagaron*/
+    public function buscarEstudiantePago($palabra){
+        if($palabra == ''){
+            $cant_reg = 10;//definimos la cantidad de datos que deseamos tenes por pagina.
+
+            if(isset($_GET["pagina"])){
+                $num_pag = $_GET["pagina"];//numero de la pagina
+            }else{
+                $num_pag = 1;
+            }
+
+            if(!$num_pag){//preguntamos si hay algun valor en $num_pag.
+                $inicio = 0;
+                $num_pag = 1;
+            }else{//se activara si la variable $num_pag ha resivido un valor oasea se encuentra en la pagina 2 o ha si susecivamente 
+                $inicio = ($num_pag-1)*$cant_reg;//si la pagina seleccionada es la numero 2 entonces 2-1 es = 1 por 10 = 10 empiesa a contar desde la 10 para la pagina 2 ok.
+            }
+
+            $result = mysql_query("SELECT * FROM estudiantes WHERE condicion='Pago'");///hacemos una consulta de todos los datos de cinternet
+           
+            $total_registros=mysql_num_rows($result);//obtenesmos el numero de datos que nos devuelve la consulta
+
+            $total_paginas = ceil($total_registros/$cant_reg);
+
+            echo '<div class="pagination" style="display: none;">
+                    ';
+            if(($num_pag+1)<=$total_paginas){//preguntamos si el numero de la pagina es menor o = al total de paginas para que aparesca el siguiente
+                
+                echo "<ul><li class='next'> <a href='reporteConcepto.php?pagina=".($num_pag+1)."'> Next </a></li></ul>";
+            } ;echo '
+                   </div>';
+
+            $resultado = mysql_query("SELECT * FROM estudiantes WHERE condicion='Pago' LIMIT $inicio,$cant_reg");//obtenemos los datos ordenados limitado con la variable inicio hasta la variable cant_reg
+            while($fila = mysql_fetch_array($resultado)){
+                   $salida = '<tr class="success"> 
+                        <td>'.$fila['nombre'].'</td>
+                        <td>'.$fila['fechaInicial'].'</td>
+                        <td>'.$fila['fechaFinal'].'</td>
+                        <td>'.$fila['dinero'].'</td>
+                        <td>'.$fila['condicion'].'</td>
+                        <td><a id="actulizarTiempo" class="btn btn-mini btn-info" href="'.$fila['id'].'"><strong>Editar</strong></a></td>
+                        <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['id'].'"><strong>Eliminar</strong></a></td>
+                    </tr>';
+                              // echo $salida;
+                    echo $salida;
+            } 
+        }else{
+             $resultado = mysql_query("SELECT * FROM estudiantes WHERE condicion='Pago' AND nombre LIKE'%$palabra%'");
+            //echo json_encode($resultado);
+            while($fila = mysql_fetch_array($resultado)){
+                   $salida = '<tr class="success"> 
+                        <td>'.$fila['nombre'].'</td>
+                        <td>'.$fila['fechaInicial'].'</td>
+                        <td>'.$fila['fechaFinal'].'</td>
+                        <td>'.$fila['dinero'].'</td>
+                        <td>'.$fila['condicion'].'</td>
+                        <td><a id="actulizarTiempo" class="btn btn-mini btn-info" href="'.$fila['id'].'"><strong>Editar</strong></a></td>
+                        <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['id'].'"><strong>Eliminar</strong></a></td>
+                    </tr>';
+                              // echo $salida;
+                    echo $salida;
+            }  
+        }
+    }
+
+    public function actulizarTiempo($fechaV,$pago,$con,$cod){
+        date_default_timezone_set('America/Bogota'); 
+        $fechaI = date("Y-m-d");
+        mysql_query("UPDATE estudiantes SET fechaInicial='$fechaI', fechaFinal='$fechaV', dinero='$pago', condicion='$con' WHERE id='$cod'") 
+                                    or die ("Error en el update");
+    }
+
+
+
+
+
+
+
+
 
 
 

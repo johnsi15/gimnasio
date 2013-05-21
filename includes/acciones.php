@@ -32,7 +32,6 @@
         $objeto->verEstudiantes();
    }
 
-
    /*modificamos el pago de algunos de los estudiantes */
    if(isset($_POST['modificarPago'])){
         $cod = $_POST['id_registro'];
@@ -40,7 +39,6 @@
         $con = $_POST['condicion'];
         $objeto->modificarPago($pago,$con,$cod);
         $objeto->verEstudiantes();
-        //$objeto->verVensiminetos();
    }
 
 
@@ -63,6 +61,7 @@
    if(isset($_POST['deleteEstudiante'])){
        $cod = $_POST['id_delete'];
        $objeto->eliminarEstudiante($cod);
+       $objeto->paginacionDatosPersonales();
        $objeto->verTodosEstudiantes();
    }
 
@@ -70,6 +69,13 @@
        $cod = $_POST['id_delete'];
        $objeto->eliminarEstudiante($cod);
        $objeto->verEstudiantes();
+   }
+
+   if(isset($_POST['deleteEstudianteTiempo'])){
+       $cod = $_POST['id_delete'];
+       $objeto->eliminarEstudiante($cod);
+       $objeto->paginacionActulizarTiempo();
+       $objeto->verActualizarTiempo();
    }
 
 
@@ -81,14 +87,39 @@
         $peso = $_POST['peso'];
         $altura = $_POST['altura'];
         $objeto->actualizarDatosPersonales($cod,$nom,$edad,$peso,$altura);
+        $objeto->paginacionDatosPersonales();
         $objeto->verTodosEstudiantes();
    }
 
-   /*buscador en tiempo real......*/
+   /*buscador en tiempo real para modificar los datos personales de los estudiantes*/
    if(isset($_POST['query'])){
        $palabra = $_POST['query'];
        $objeto->buscarEstudiante($palabra);
    }
+   /*buscador en tiempo real para los estudiantes que estan pagos y van a renovar el tiempo de uso del gim*/
+   if(isset($_POST['queryTiempo'])){
+       $palabra = $_POST['queryTiempo'];
+       $objeto->buscarEstudiantePago($palabra);
+   }
+  /*actulizar el tiempo de uso del gim*/
+   if(isset($_POST['modificarTiempo'])){
+      $cod = $_POST['id_registro'];
+      $fechaV = $_POST['fechaV'];
+      $pago = $_POST['pago'];
+      $con = $_POST['condicion'];
+      $objeto->actulizarTiempo($fechaV,$pago,$con,$cod);
+      $objeto->paginacionActulizarTiempo();
+      $objeto->verActualizarTiempo();
+   }
+
+
+
+
+
+
+
+
+
 
 
 

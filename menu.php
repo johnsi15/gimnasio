@@ -86,24 +86,6 @@
 	<script>
       $(document).ready(function(){
 		
-         /*_______________________________________________*/
-		  var cuadro = $('#recuadro');
-		  var cuadro_offset = cuadro.offset();
-		  // Cada vez que se haga scroll en la página
-		  // haremos un chequeo del estado del menú
-		  // y lo vamos a alternar entre 'fixed' y 'static'.
-		  var tamaño = 550;
-		  $(window).on('scroll', function() {
-		    if($(window).scrollTop() > tamaño) {
-		      cuadro.addClass('notas');
-		      $("#recuadro").css("display", "block");
-		      $('#notas').focus();
-		    } else {
-		      $("#recuadro").css("display", "none");
-		      cuadro.removeClass('notas');
-		      $('#foco').focus();
-		    }
-		  });
          /*____________________________________________-*/
          $('.cerrar').click(function(){
          	 //$('#aviso').css("display","none");
@@ -196,7 +178,7 @@
 								</a>
 								<ul class="dropdown-menu">
 									<li><a href="includes/actualizarDatos.php">Actualizar Datos Personales</a></li>
-									<li><a href="">Actualizar Tiempo</a></li>
+									<li><a href="includes/actualizarTiempo.php">Actualizar Tiempo</a></li>
 								</ul>
 							</li>
 							<li class="divider-vertical"></li>
@@ -263,21 +245,6 @@
 			
 		</div>
 	</article>
-    
-    <!-- CUADRO DE NOTAS......-->
-	<div class="span4" id="recuadro" style="display: none;">
-		<form action="includes/acciones.php" method="post">
-			<div class="control-group"> <!-- <ul id="boton" class="btn btn-inverse" style="margin-left: 230px;">X</ul> -->
-			   	<label for="Notas"><strong style="color: white;">Notas:</strong></label>
-			   	<div class="controls"><!-- Tener en cuenta el texarea deja espacion si no se acomoda las llaves del php seguidas ok -->
-				    <textarea name="nota" id="notas" cols="0" rows="7" autofocus><?php require_once("includes/funciones.php"); $objeto = new funciones(); $objeto->verNota();
-				    ?></textarea>
-			   	</div>
-			   	<input type="hidden" name="notas">
-			    <button id="nota" class="btn btn-inverse">Guardar</button>
-		    </div>
-		</form>
-	</div>
 
      <!--Codigo para modificar pago-->
      <div class="hide" id="editarPago" title="Editar Registro">
@@ -294,10 +261,11 @@
 					<option value="Abono">Abono</option>
 				</select>
 				<input type="hidden" name="modificarPago">
-				<button type="submit" id="modificarPago" class="btn btn-success">Modificar</button>
+				<button id="modificarPago" class="btn btn-success">Modificar</button>
 				<button id="cancelar" class="btn btn-danger">Cancelar</button>
      	</form>
      </div>
+
     <!--modificamos los pagos que se vencieron-->
      <div class="hide" id="editarPagoVencimiento" title="Editar Registro">
      	<form action="includes/acciones.php" method="post">
@@ -317,7 +285,8 @@
 				<button id="cancelar" class="btn btn-danger">Cancelar</button>
      	</form>
      </div>
-      <!--Aca va el codigo para eliminar-->
+
+    <!--Aca va el codigo para eliminar-->
     <div class="hide" id="deleteReg" title="Eliminar Estudiante">
 	    <form action="includes/acciones.php" method="post">
 	    	<fieldset id="datosOcultos">
