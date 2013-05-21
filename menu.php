@@ -173,7 +173,7 @@
 							<li class="divider-vertical"></li>
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-									Estudiantes
+									Clientes
 									<span class="caret"></span>
 								</a>
 								<ul class="dropdown-menu">
@@ -200,7 +200,7 @@
 							<?php 
 								date_default_timezone_set('America/Bogota'); 
 						        $fecha = date("Y-m-d");
-						        echo '<li><a href="#" style="font-weight: bold;">Hoy es: '.$fecha.'</a></li>';
+						        echo '<li><a href="#" style="font-weight: bold;">Fecha: '.$fecha.'</a></li>';
 					        ?>
 						</ul>
 					</div>

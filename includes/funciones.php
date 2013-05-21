@@ -1480,6 +1480,8 @@
             }  
         }
     }
+
+    
     /*MODIFICAR DATOS DEL USUAIRO Y CREAR....*/
     public function editarNombreUser($nom,$cod){
         $nom = strtolower($nom);

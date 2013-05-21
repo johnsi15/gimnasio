@@ -197,7 +197,7 @@
 							<li class="divider-vertical"></li>
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-									Estudiantes
+									Clientes
 									<span class="caret"></span>
 								</a>
 								<ul class="dropdown-menu">

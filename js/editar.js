@@ -330,6 +330,9 @@ $(document).ready(function(){
        $('#formulario').dialog('close');
     });
 
+    var petNomUser = $('#formulario form').attr('action');
+    var metNomUser = $('#formulario form').attr('method');
+
     $('#formulario form').on('click','#UserModificar',function(e){
                 e.preventDefault();
 
@@ -337,8 +340,8 @@ $(document).ready(function(){
                   beforeSend: function(){
 
                   },
-                  url: pet,
-                  type: met,
+                  url: petNomUser,
+                  type: metNomUser,
                   data: $('#formulario form').serialize(),
                   success: function(resp){
                         console.log(resp);
@@ -393,6 +396,9 @@ $(document).ready(function(){
            // $('#contraseña').val($(this).parent().parent().children('td:eq(1)').text());
             //$('#dinero').val($(this).parent().parent().children('td:eq(0)').text());
       });
+
+      var petContra = $('#formulario form').attr('action');
+      var metContra = $('#formulario form').attr('method');
       $("#contraseñaValidar").validate({
             rules:{
                   contraseñaA:{
@@ -408,8 +414,8 @@ $(document).ready(function(){
                   beforeSend: function(){
 
                   },
-                  url: pet,
-                  type: met,
+                  url: petContra,
+                  type: metContra,
                   data: $('#formularioContraseña form').serialize(),
                   success: function(resp){
                         console.log(resp);
