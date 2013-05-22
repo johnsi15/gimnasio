@@ -19,6 +19,7 @@
 
    /*registrar un nuevo estudiante al gim*/
    if(isset($_POST['registrarEstudiante'])){
+        $codigo = $_POST['codigo'];
         $nom = $_POST['nombre'];
         $edad = $_POST['edad'];
         $peso = $_POST['peso'];
@@ -28,8 +29,9 @@
         $fechaV = $_POST['fecha2'];
         $pago = $_POST['pago'];
         $con = $_POST['condicion'];
-        $objeto->registrarEstudiante($nom,$edad,$peso,$altura,$fechaI,$fechaV,$pago,$con);
+        $objeto->registrarEstudiante($codigo,$nom,$edad,$peso,$altura,$fechaI,$fechaV,$pago,$con);
         $objeto->verEstudiantes();
+        $objeto->registrarFechasEstudiante($nom,$fechaI,$fechaV,$pago,$con,$codigo);
    }
 
    /*modificamos el pago de algunos de los estudiantes */
@@ -39,6 +41,7 @@
         $con = $_POST['condicion'];
         $objeto->modificarPago($pago,$con,$cod);
         $objeto->verEstudiantes();
+        $objeto->modificarPagoFechas($pago,$con,$cod);
    }
 
 
@@ -49,6 +52,7 @@
         $con = $_POST['condicion'];
         $objeto->modificarPago($pago,$con,$cod);
         $objeto->verVensimientos();
+        $objeto->modificarPagoFechas($pago,$con,$cod);
    }
 
 
@@ -104,12 +108,16 @@
   /*actulizar el tiempo de uso del gim*/
    if(isset($_POST['modificarTiempo'])){
       $cod = $_POST['id_registro'];
+      date_default_timezone_set('America/Bogota'); 
+      $fechaI = date("Y-m-d");
+      $nom = $_POST['nombre'];
       $fechaV = $_POST['fechaV'];
       $pago = $_POST['pago'];
       $con = $_POST['condicion'];
       $objeto->actulizarTiempo($fechaV,$pago,$con,$cod);
       $objeto->paginacionActulizarTiempo();
       $objeto->verActualizarTiempo();
+      $objeto->registrarFechasEstudiante($nom,$fechaI,$fechaV,$pago,$con,$cod);
    }
 
 
@@ -220,10 +228,7 @@
    if(isset($_POST['calcular'])){
       $fecha1 = $_POST['fecha1'];
       $fecha2 = $_POST['fecha2'];
-      $tipo = $_POST['tipo'];
-      if($objeto->calcularReporte($fecha1,$fecha2,$tipo)){
-
-      }
+      $objeto->calcularReporte($fecha1,$fecha2);
    }
 
    if(isset($_POST['cierre'])){

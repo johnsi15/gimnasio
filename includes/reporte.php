@@ -9,6 +9,7 @@
 	<script src="../js/bootstrap.js"></script>
 	<script src="../js/buscar.js"></script>
 	<script src="../js/calculos.js"></script>
+	<script src="../js/funciones.js"></script>
 	<!--<script src="../js/calcularReporte.js"></script>-->
 	<style>
 	    body{
@@ -26,7 +27,6 @@
 		p{
 	    	color: #df0024;
 	    	font-size: 20px;
-	    	text-align: right;
 	    }
 		#fondo{
 			background: #feffff;
@@ -34,6 +34,16 @@
 		#fuente{
 			font-size: 23px;
 		}
+		#mensaje{
+	        float: left;
+	        margin-left: 480px;
+	        position: fixed;
+       	}
+       	#mensajeError{
+       		float: left;
+	        margin-left: 680px;
+	        position: fixed;
+       	}
 		#titulo{
 			text-align: center;
 			font-size: 32px;
@@ -41,25 +51,19 @@
 		}
         .hero-unit{
         	margin-top: 30px;
-        	text-align: center;
-        	background-image: url('../img/Tarjeta_mario3.png');
+        	height: 200px;
+        	background-image: url('../img/gim6.jpg');
         }
 	</style>	
 	<script>
       $(document).ready(function() {
-		  var menu = $('#menu');
-		  var contenedor = $('#menu-contenedor');
-		  var menu_offset = menu.offset();
-		  // Cada vez que se haga scroll en la página
-		  // haremos un chequeo del estado del menú
-		  // y lo vamos a alternar entre 'fixed' y 'static'.
-		  $(window).on('scroll', function() {
-		    if($(window).scrollTop() > menu_offset.top) {
-		      menu.addClass('menu-fijo');
-		    } else {
-		      menu.removeClass('menu-fijo');
-		    }
-		  });
+			 /*______________________________________________*/
+	        $("#menuOpen").mouseout(function(){
+	            //$("#formMenu").removeClass('open');
+		    }).mouseover(function(){
+		        $("#formMenu").addClass('open');
+		        $("#foco").focus();
+	        });
 	  });
 	</script>
 	<?php
@@ -73,34 +77,71 @@
 </head>
 <body>
 	<header class="container">
-		<div class="hero-unit">
-			<br><br><br><br><br><br><br>
-		</div>
-	</header>
-
-	<article class="container well" id="fondo">
-		<div class="navbar" id="menu-contenedor">
-			<div class="navbar-inner" id="menu">
-				<div class="container">
+		<div class="navbar navbar-fixed-top navbar-inverse">
+			<div class="navbar-inner">
+				<div class="container" >
 					<a  class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</a>
-					<a href="../menu.php" class="brand">LaRed.Com</a>
-					<div class="nav-collapse">
-						<ul class="nav">
-							<li><a href="../menu.php"><i class="icon-home"></i>Home</a></li>
-							<li><a href="internet.php">Internet</a></li>
-							<li><a href="recargas.php">Recargas</a></li>
-							<li><a href="minutos.php">Minutos</a></li>
-							<li><a href="vitrina.php">Vitrina</a></li>
-							<li><a href="cierreDiario.php">Cierre</a></li>
-							<li><a href="gastos.php"><i class="icon-bookmark"></i>Gastos</a></li>
-							<li class="active"><a href="reporte.php"><i class="icon-book"></i>Reportes</a></li>
+					<a href="../menu.php" class="brand">Nombre del Gim</a>
+					<div class="nav-collapse collapse">
+						<ul class="nav" >
+							<li class="divider-vertical"></li>
+							<li><a href="../menu.php"><i class="icon-home icon-white"></i>Inicio</a></li>
+							<li class="divider-vertical"></li>
+								<li id="formMenu" class="dropdown">
+									<a id="menuOpen" class="dropdown-toggle" data-toggle="dropdown">
+										Registrar
+										<span class="caret"></span>
+									</a>
+									<ul class="dropdown-menu pull-right">
+										<div class="span4" id="registrarNew">
+											<form action="acciones.php" method="post" id="registrarEstudiante" style="margin-left: 30px;" class="limpiar">
+												<label>N° Identificación:</label>
+												<input type="text" name="codigo" id="foco" autofocus required>
+												<label>Nombre:</label>
+												<input type="text" name="nombre" id="foco" autofocus required/>
+												<label>Edad:</label>
+												<input type="text" name="edad" required/>
+												<label>Peso - Kg:</label>
+												<input type="text" name="peso" required/>
+												<label>Altura - M:</label>
+												<input type="text" name="altura" required/>
+												<label>Fecha Vencimiento:</label>
+												<input type="date" name="fecha2" required/>
+												<label>Pago:</label>
+												<input type="text" name="pago" value="0"/>
+												<label>Condición:</label>
+												<select name="condicion" id="recar">
+							    					<option value="No Pago">No Pago</option>
+							    					<option value="Pago">Pago</option>
+							    					<option value="Abono">Abono</option>
+							    				</select>
+							    				<input type="hidden" name="registrarEstudiante">
+							    				<button type="submit" class="btn btn-success">Registrar</button>
+											</form>
+										</div>
+									</ul>
+								</li>
+							<li class="divider-vertical"></li>
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-									<i class="icon-user"></i> <?php echo $user; ?> <!--Mostramoe el user logeado -->
+									Clientes
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu">
+									<li><a href="actualizarDatos.php">Actualizar Datos Personales</a></li>
+									<li><a href="#">Actualizar Tiempo</a></li>
+								</ul>
+							</li>
+							<li class="divider-vertical"></li>
+							<li class="active"><a href="#"><i class="icon-book icon-white"></i> Reporte</a></li>
+							<li class="divider-vertical"></li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									<i class="icon-user icon-white"></i> <?php echo $user; ?> <!--Mostramoe el user logeado -->
 								    <span class="caret"></span>
 								</a>
 								<ul class="dropdown-menu">
@@ -110,77 +151,32 @@
 									<li><a href="cerrar.php">Cerrar Sesion</a></li>
 								</ul>
 							</li>
+							<li class="divider-vertical"></li>
+							<?php 
+								date_default_timezone_set('America/Bogota'); 
+						        $fecha = date("Y-m-d");
+						        echo '<li><a href="#" style="font-weight: bold;">Fecha: '.$fecha.'</a></li>';
+					        ?>
 						</ul>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			<aside><h1>Reportes La Red.Com</h1></aside><br><br>
-			<aside class="span1"></aside>
-			<div class="span9">
-				<form action="acciones.php" method="post" class="form-inline">
-					<label for="tipo">Tipo de Concepto </label>
-					<select name="tipo" id="tipo">
-						<option value="internet">Internet</option>
-						<option value="recarga">Recargas</option>
-						<option value="minutos">Minutos</option>
-						<option value="vitrina">Vitrina</option>
-					</select>
-					<label for="fecha">Fecha</label>
-					<input type="date" name="fecha">
-					<input type="hidden" name="enviar">
-					<button type="submit" name="enviar" class="btn btn-success">Buscar</button>
-				</form>
-			</div>
+	</header>
+	<aside id="mensaje"></aside><!--menssaje de exito del registro o de error-->
+	<aside id="mensajeError"></aside><!--menssaje de exito del registro o de error-->
+    <section class="container">
+      	<div class="hero-unit">
+			
 		</div>
-		<hr>
-		<div class="row">
-			<aside class="span3"><a href="reporteConcepto.php" class="btn btn-inverse btn-large" target="_blank">Ver Por Concepto</a></aside>
-			<div class="span6">
-				<div id="mensaje"></div>
-				<table class="table table-hover table-bordered">
-					<thead>
-						<tr>
-							<th>Base</th>
-							<th>Total Dia</th>
-							<th>Tipo</th>
-							<th>Fecha</th>
-						</tr>
-					</thead>
-					<tbody id="resul">
-						<?php
-						  require_once('funciones.php');
-						  $objeto = new funciones();
-						  $objeto->buscarReporteInicio();
-						?>
-					</tbody>
-				</table>
-				<div>
-					<?php
-					    require_once('funciones.php');
-					    $objeto = new funciones();
-					    $objeto->paginacionReporte();
-					?>
-				</div>
-			</div>
-		</div>
-	</article>
-
-    <!-- Segundo articulo para ver totales de meses y dias-->
+    </section>
 	<article class="container well" id="fondo">
-		<p id="titulo">Calculo de Cierres Menos Gastos</p><br><br>
-		<div id="mensajeCalculo"></div><!--Mensaje de exito o de Error.....-->
+			<div id="mensaje"></div>
+			<p id="titulo">Calcular Ganancias</p><br><br>
+			<div id="mensajeCalculo"></div><!--Mensaje de exito o de Error.....-->
 		<div class="row">
 			<div class="span3 well" id="fondo" style="margin-left: 60px;">
 				<form action="acciones.php" method="post">
-					<label for="tipo" id="fuente">Tipo</label>
-					<select name="tipo" id="tipo">
-						<option value="internet">Internet</option>
-						<option value="recarga">Recargas</option>
-						<option value="minutos">Minutos</option>
-						<option value="vitrina">Vitrina</option>
-					</select>
 					<label for="fecha" id="fuente">Fecha Inicial</label>
 					<input type="date" name="fecha1">
 					<label for="fecha2" id="fuente">Fecha Final</label>
@@ -188,20 +184,38 @@
 					<input type="hidden" name="calcular"><br><br>
 					<button id="calcularReporte" name="calcular" class="btn btn-success">Calcular</button>
 				</form>
+
 			</div>
-			<aside class="span1"></aside>
-			<div class="span6 well" id="resultado" style="background: #feffff;">
-				<h3 class="well" style="text-align: center;"> Calcular Ganancias Y Gastos </h3>
+				<div class="span6" id="resultado">
+					<h3 class="well">Calculo: </h3>
+				</div>
+		</div>
+		<div class="row">
+			<div class="span3"></div>
+			<div class="span6">
+				<table class="table table-hover table-bordered">
+					<thead>
+						<tr>
+							<th>Mes</th>
+							<th>Ganancias</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php
+						  require_once('funciones.php');
+						  $objeto = new funciones();
+						  $objeto->calculosMes(); 
+						?>
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</article>
 
-	<footer class="container well">
-		<div class="span7">
-		   <h2><img src="../img/copyright.png" alt="Autor"> John Andrey Serrano - 2013</h2>
-		</div>
-		<div class="span4"> <br>
-			<p>Lared.com Version 3.0</p>
+	<footer>
+		<h2 id="pie"><img src="../img/copyright.png" alt="Autor"> John Andrey Serrano - 2013</h2>
+		<div id="pie"> <br>
+			<p>Gim Version 1.0</p>
 		</div>
 	</footer>
 </body>

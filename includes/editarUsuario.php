@@ -11,7 +11,7 @@
 	<script src="../js/bootstrap.js"></script>
 	<script src="../js/jquery.validate.js"></script>
 	<script src="../js/editar.js"></script>
-	<!--<script src="../js/funciones.js"></script>-->
+	<script src="../js/funciones.js"></script>
 	<!--<script src="../js/registrar.js"></script>-->
 	<!--<script src="../js/eliminar.js"></script>-->
 	<style>
@@ -47,6 +47,11 @@
 	    #mensaje{
 	        float: left;
 	        margin-left: 480px;
+	        position: fixed;
+       	}
+       	#mensajeError{
+       		float: left;
+	        margin-left: 680px;
 	        position: fixed;
        	}
         .hero-unit{
@@ -104,6 +109,8 @@
 								<ul class="dropdown-menu pull-right">
 									<div class="span4" id="registrarNew">
 										<form action="acciones.php" method="post" id="registrarEstudiante" style="margin-left: 30px;" class="limpiar">
+											<label>N° Identificación:</label>
+											<input type="text" name="codigo" id="foco" autofocus required>
 											<label>Nombre:</label>
 											<input type="text" name="nombre" id="foco" autofocus required/>
 											<label>Edad:</label>
@@ -158,15 +165,17 @@
 							<?php 
 								date_default_timezone_set('America/Bogota'); 
 						        $fecha = date("Y-m-d");
-						        echo '<li><a href="#" style="font-weight: bold;">Hoy es: '.$fecha.'</a></li>';
+						        echo '<li><a href="#" style="font-weight: bold;">Fecha: '.$fecha.'</a></li>';
 					        ?>
 						</ul>
 					</div>
 				</div>
 			</div>
 		</div>
-		
 	</header>
+	 <aside id="mensaje"></aside><!--menssaje de exito del registro o de error-->
+	 <aside id="mensajeError"></aside><!--menssaje de exito del registro o de error-->
+
 	<section>
 		<div class="container">
 			<div class="hero-unit">
@@ -174,6 +183,7 @@
 			</div>
 		</div>
 	</section>
+
     <!--Primer articulo... -->
 	<article class="container well" id="fondo">
 		<div class="row">

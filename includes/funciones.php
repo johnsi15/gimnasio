@@ -24,9 +24,15 @@
          }
     }
 
-    public function registrarEstudiante($nom,$edad,$peso,$altura,$fechaI,$fechaV,$pago,$con){/*condicion el 0-> no pago el 1-> debe el 2-> abono*/
-           $resultado = mysql_query("INSERT INTO estudiantes (nombre,edad,peso,altura,fechaInicial,fechaFinal,dinero,condicion)
-                                      VALUES ('$nom','$edad','$peso','$altura','$fechaI','$fechaV','$pago','$con')")
+    public function registrarEstudiante($codigo,$nom,$edad,$peso,$altura,$fechaI,$fechaV,$pago,$con){/*condicion el 0-> no pago el 1-> debe el 2-> abono*/
+           $resultado = mysql_query("INSERT INTO estudiantes (codigo,nombre,edad,peso,altura,fechaInicial,fechaFinal,dinero,condicion)
+                                      VALUES ('$codigo','$nom','$edad','$peso','$altura','$fechaI','$fechaV','$pago','$con')")
+                                      or die ("Error");
+    }
+
+    public function registrarFechasEstudiante($nom,$fechaI,$fechaV,$pago,$con,$codigo){
+            $resultado = mysql_query("INSERT INTO fechasClientes (nombre,fechaInicial,fechaFinal,dinero,condicion,codigoEstudiante)
+                                      VALUES ('$nom','$fechaI','$fechaV','$pago','$con','$codigo')")
                                       or die ("problemas con el insert de concepto de internet".mysql_error());
     }
 
@@ -38,33 +44,33 @@
                  echo '<tr class="success"> 
                          <td>'.$fila['nombre'].'</td>
                          <td>'.$fila['fechaInicial'].'</td>
-                         <td>'.$fila['fechaFinal'].'</td>
+                         <td style="font-weight: bold;">'.$fila['fechaFinal'].'</td>
                          <td>'.$fila['dinero'].'</td>
                          <td>'.$fila['condicion'].'</td>
                          <td><a disabled class="btn btn-mini btn-info"><strong disabled>Editar</strong></a></td>
-                         <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['id'].'"><strong>Eliminar</strong></a></td>
+                         <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['codigo'].'"><strong>Eliminar</strong></a></td>
                      </tr>';
             }else{
                 if($fila['condicion'] == 'No Pago'){
                     echo '<tr class="error"> 
                          <td>'.$fila['nombre'].'</td>
                          <td>'.$fila['fechaInicial'].'</td>
-                         <td>'.$fila['fechaFinal'].'</td>
+                         <td style="font-weight: bold;">'.$fila['fechaFinal'].'</td>
                          <td>'.$fila['dinero'].'</td>
                          <td>'.$fila['condicion'].'</td>
-                         <td><a id="editPago" class="btn btn-mini btn-info" href="'.$fila['id'].'"><strong>Editar</strong></a></td>
-                         <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['id'].'"><strong>Eliminar</strong></a></td>
+                         <td><a id="editPago" class="btn btn-mini btn-info" href="'.$fila['codigo'].'"><strong>Editar</strong></a></td>
+                         <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['codigo'].'"><strong>Eliminar</strong></a></td>
                      </tr>';
                 }else{
                     if($fila['condicion'] == 'Abono'){
                         echo '<tr class="warning"> 
                                  <td>'.$fila['nombre'].'</td>
                                  <td>'.$fila['fechaInicial'].'</td>
-                                 <td>'.$fila['fechaFinal'].'</td>
+                                 <td style="font-weight: bold;">'.$fila['fechaFinal'].'</td>
                                  <td>'.$fila['dinero'].'</td>
                                  <td>'.$fila['condicion'].'</td>
-                                 <td><a id="editPago" class="btn btn-mini btn-info" href="'.$fila['id'].'"><strong>Editar</strong></a></td>
-                                 <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['id'].'"><strong>Eliminar</strong></a></td>
+                                 <td><a id="editPago" class="btn btn-mini btn-info" href="'.$fila['codigo'].'"><strong>Editar</strong></a></td>
+                                 <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['codigo'].'"><strong>Eliminar</strong></a></td>
                              </tr>';
                     }
                 }
@@ -86,20 +92,20 @@
                         echo '<tr class="error"> 
                              <td>'.$fila['nombre'].'</td>
                              <td>'.$fila['fechaInicial'].'</td>
-                             <td>'.$fila['fechaFinal'].'</td>
+                             <td style="font-weight: bold;">'.$fila['fechaFinal'].'</td>
                              <td>'.$fila['dinero'].'</td>
                              <td>'.$fila['condicion'].'</td>
-                             <td><a id="editPagoVen" class="btn btn-mini btn-inverse" href="'.$fila['id'].'"><strong>Editar</strong></a></td>
+                             <td><a id="editPagoVen" class="btn btn-mini btn-inverse" href="'.$fila['codigo'].'"><strong>Editar</strong></a></td>
                          </tr>';
                 }else{
                     if($fila['condicion'] == 'Abono'){
                             echo '<tr class="warning"> 
                                      <td>'.$fila['nombre'].'</td>
                                      <td>'.$fila['fechaInicial'].'</td>
-                                     <td>'.$fila['fechaFinal'].'</td>
+                                     <td style="font-weight: bold;">'.$fila['fechaFinal'].'</td>
                                      <td>'.$fila['dinero'].'</td>
                                      <td>'.$fila['condicion'].'</td>
-                                     <td><a id="editPagoVen" class="btn btn-mini btn-inverse" href="'.$fila['id'].'"><strong>Editar</strong></a></td>
+                                     <td><a id="editPagoVen" class="btn btn-mini btn-inverse" href="'.$fila['codigo'].'"><strong>Editar</strong></a></td>
                                  </tr>';
                     }
                 }
@@ -109,20 +115,20 @@
                         echo '<tr class="error"> 
                              <td>'.$fila['nombre'].'</td>
                              <td>'.$fila['fechaInicial'].'</td>
-                             <td>'.$fila['fechaFinal'].'</td>
+                             <td style="font-weight: bold;">'.$fila['fechaFinal'].'</td>
                              <td>'.$fila['dinero'].'</td>
                              <td>'.$fila['condicion'].'</td>
-                             <td><a id="editPagoVen" class="btn btn-mini btn-inverse" href="'.$fila['id'].'"><strong>Editar</strong></a></td>
+                             <td><a id="editPagoVen" class="btn btn-mini btn-inverse" href="'.$fila['codigo'].'"><strong>Editar</strong></a></td>
                          </tr>';
                     }else{
                         if($fila['condicion'] == 'Abono'){
                                 echo '<tr class="warning"> 
                                          <td>'.$fila['nombre'].'</td>
                                          <td>'.$fila['fechaInicial'].'</td>
-                                         <td>'.$fila['fechaFinal'].'</td>
+                                         <td style="font-weight: bold;">'.$fila['fechaFinal'].'</td>
                                          <td>'.$fila['dinero'].'</td>
                                          <td>'.$fila['condicion'].'</td>
-                                         <td><a id="editPagoVen" class="btn btn-mini btn-inverse" href="'.$fila['id'].'"><strong>Editar</strong></a></td>
+                                         <td><a id="editPagoVen" class="btn btn-mini btn-inverse" href="'.$fila['codigo'].'"><strong>Editar</strong></a></td>
                                      </tr>';
                         }
                     }
@@ -173,25 +179,30 @@
                         <td>'.$fila['edad'].'</td>
                         <td>'.$fila['peso'].'</td>
                         <td>'.$fila['altura'].'</td>
-                        <td><a id="editEstudiante" class="btn btn-mini btn-info" href="'.$fila['id'].'"><strong>Editar</strong></a></td>
-                        <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['id'].'"><strong>Eliminar</strong></a></td>
+                        <td><a id="editEstudiante" class="btn btn-mini btn-info" href="'.$fila['codigo'].'"><strong>Editar</strong></a></td>
+                        <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['codigo'].'"><strong>Eliminar</strong></a></td>
                     </tr>';
         }
     }
 
     public function modificarPago($pago,$con,$cod){
-        mysql_query("UPDATE estudiantes SET dinero='$pago', condicion='$con' WHERE id='$cod'") 
+        mysql_query("UPDATE estudiantes SET dinero='$pago', condicion='$con' WHERE codigo='$cod'") 
+                                    or die ("Error en el update");
+    }
+    /*modificamos el pago en la tabla de fechas para poder llevar control del tiempo y dinero que lleva cada persona*/
+    public function modificarPagoFechas($pago,$con,$cod){
+         mysql_query("UPDATE fechasClientes SET dinero='$pago', condicion='$con' WHERE codigoEstudiante='$cod'") 
                                     or die ("Error en el update");
     }
 
      /*metodos para ELIMINAR estudiantes del gim*/
     public function eliminarEstudiante($cod){
-        mysql_query("DELETE FROM estudiantes WHERE id='$cod'");
+        mysql_query("DELETE FROM estudiantes WHERE codigo='$cod'");
     }
 
    /*aca comienzo con la partde de actulizar datos de los estudiantes que van al gim*/
     public function actualizarDatosPersonales($cod,$nom,$edad,$peso,$altura){
-        mysql_query("UPDATE estudiantes SET nombre='$nom', edad='$edad', peso='$peso', altura='$altura' WHERE id='$cod'") 
+        mysql_query("UPDATE estudiantes SET nombre='$nom', edad='$edad', peso='$peso', altura='$altura' WHERE codigo='$cod'") 
                                     or die ("Error en el update");
     }
 
@@ -235,8 +246,8 @@
                         <td>'.$fila['edad'].'</td>
                         <td>'.$fila['peso'].'</td>
                         <td>'.$fila['altura'].'</td>
-                        <td><a id="editEstudiante" class="btn btn-mini btn-info" href="'.$fila['id'].'"><strong>Editar</strong></a></td>
-                        <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['id'].'"><strong>Eliminar</strong></a></td>
+                        <td><a id="editEstudiante" class="btn btn-mini btn-info" href="'.$fila['codigo'].'"><strong>Editar</strong></a></td>
+                        <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['codigo'].'"><strong>Eliminar</strong></a></td>
                     </tr>';
                               // echo $salida;
                     echo $salida;
@@ -250,8 +261,8 @@
                         <td>'.$fila['edad'].'</td>
                         <td>'.$fila['peso'].'</td>
                         <td>'.$fila['altura'].'</td>
-                        <td><a id="editEstudiante" class="btn btn-mini btn-info" href="'.$fila['id'].'"><strong>Editar</strong></a></td>
-                        <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['id'].'"><strong>Eliminar</strong></a></td>
+                        <td><a id="editEstudiante" class="btn btn-mini btn-info" href="'.$fila['codigo'].'"><strong>Editar</strong></a></td>
+                        <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['codigo'].'"><strong>Eliminar</strong></a></td>
                     </tr>';
                               // echo $salida;
                     echo $salida;
@@ -303,8 +314,8 @@
                          <td>'.$fila['fechaFinal'].'</td>
                          <td>'.$fila['dinero'].'</td>
                          <td>'.$fila['condicion'].'</td>
-                         <td><a id="tiempoEstudiante" class="btn btn-mini btn-info" href="'.$fila['id'].'"><strong>Editar</strong></a></td>
-                         <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['id'].'"><strong>Eliminar</strong></a></td>
+                         <td><a id="tiempoEstudiante" class="btn btn-mini btn-info" href="'.$fila['codigo'].'"><strong>Editar</strong></a></td>
+                         <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['codigo'].'"><strong>Eliminar</strong></a></td>
                      </tr>';
                           // echo $salida;
         }      
@@ -382,8 +393,8 @@
                         <td>'.$fila['fechaFinal'].'</td>
                         <td>'.$fila['dinero'].'</td>
                         <td>'.$fila['condicion'].'</td>
-                        <td><a id="actulizarTiempo" class="btn btn-mini btn-info" href="'.$fila['id'].'"><strong>Editar</strong></a></td>
-                        <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['id'].'"><strong>Eliminar</strong></a></td>
+                        <td><a id="actulizarTiempo" class="btn btn-mini btn-info" href="'.$fila['codigo'].'"><strong>Editar</strong></a></td>
+                        <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['codigo'].'"><strong>Eliminar</strong></a></td>
                     </tr>';
                               // echo $salida;
                     echo $salida;
@@ -398,8 +409,8 @@
                         <td>'.$fila['fechaFinal'].'</td>
                         <td>'.$fila['dinero'].'</td>
                         <td>'.$fila['condicion'].'</td>
-                        <td><a id="actulizarTiempo" class="btn btn-mini btn-info" href="'.$fila['id'].'"><strong>Editar</strong></a></td>
-                        <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['id'].'"><strong>Eliminar</strong></a></td>
+                        <td><a id="actulizarTiempo" class="btn btn-mini btn-info" href="'.$fila['codigo'].'"><strong>Editar</strong></a></td>
+                        <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['codigo'].'"><strong>Eliminar</strong></a></td>
                     </tr>';
                               // echo $salida;
                     echo $salida;
@@ -410,9 +421,90 @@
     public function actulizarTiempo($fechaV,$pago,$con,$cod){
         date_default_timezone_set('America/Bogota'); 
         $fechaI = date("Y-m-d");
-        mysql_query("UPDATE estudiantes SET fechaInicial='$fechaI', fechaFinal='$fechaV', dinero='$pago', condicion='$con' WHERE id='$cod'") 
+        mysql_query("UPDATE estudiantes SET fechaInicial='$fechaI', fechaFinal='$fechaV', dinero='$pago', condicion='$con' WHERE codigo='$cod'") 
                                     or die ("Error en el update");
     }
+
+
+    /*CALCULO DE LOS REPORTES DE GANANCIAS POR FECHA*/
+    public function calcularReporte($fecha1,$fecha2){
+        $resultado = mysql_query("SELECT sum(dinero) AS total FROM fechasClientes WHERE fechaInicial AND fechaFinal between'$fecha1' AND '$fecha2'");
+        $fila = mysql_fetch_array($resultado);
+            $salida = '<h3 class="well"> Calculo: $'.number_format($fila['total']).'</h3>';
+            echo $salida;     
+    }
+
+
+    public function calculosMes(){
+        $resultado = mysql_query("SELECT * FROM fechasClientes WHERE condicion='Pago'");
+         $conE = 0; $conF=0; $conM=0; $conA=0; $conMy=0; $conJ=0;
+        while($fila = mysql_fetch_array($resultado)){
+                    $fecha1 = $fila['fechaInicial'];
+                    $fecha2 = $fila['fechaFinal'];
+
+                $mes = substr($fecha1,5,-3);
+
+                    $resul = mysql_query("SELECT sum(dinero) AS total FROM fechasClientes
+                                         WHERE condicion='Pago' AND fechaInicial AND fechaFinal between'$fecha1' AND '$fecha2'");
+                    $fila2 = mysql_fetch_array($resul);
+
+                if($mes=='01' and $conE==0){
+                    $mes="Enero";
+                      echo '<tr> 
+                                <td>'.$mes.'</td>
+                                <td>'.$fila2['total'].'</td>
+                            </tr>';
+                            $conE++;
+                }else{
+                    if($mes=='02' and $conF==0){
+                        $mes="Febrero";
+                        echo '<tr> 
+                                <td>'.$mes.'</td>
+                                <td>'.$fila2['total'].'</td>
+                            </tr>';
+                        $conF++;
+                    }
+                    else{
+                        if($mes=='03' and $conM==0){
+                            $mes="Marzo";
+                            echo '<tr> 
+                                    <td>'.$mes.'</td>
+                                    <td>'.$fila2['total'].'</td>
+                                </tr>';
+                            $conM++;
+                        }else{
+                            if($mes=='04' and $conA==0){
+                                $mes="Abril";
+                                echo '<tr> 
+                                        <td>'.$mes.'</td>
+                                        <td>'.$fila2['total'].'</td>
+                                    </tr>';
+                                $conA++;
+                            }else{
+                                if($mes=='05' and $conMy==0){
+                                    $mes='Mayo';
+                                    echo '<tr> 
+                                            <td>'.$mes.'</td>
+                                            <td>'.$fila2['total'].'</td>
+                                        </tr>';
+                                    $conMy++;
+                                }else{
+                                    if($mes=='06' and $conJ==0){
+                                        $mes = 'Junio';
+                                        echo '<tr> 
+                                                <td>'.$mes.'</td>
+                                                <td>'.$fila2['total'].'</td>
+                                            </tr>';
+                                        $conJ++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+        }
+        
+    }/*cierre de la funcion*/
 
 
 
@@ -669,51 +761,6 @@
                   </tr>';
          echo $salida;
     }
-
-    /*public function reporteDiarioBase(){///TENER EN CUENTA NO TIENE RELACION HACER ALGO AL RESPECTO. y el select no debe de ir asi por si acaso...
-        date_default_timezone_set('America/Bogota');
-        $fecha = date("Y-m-d");
-
-        $resultado = mysql_query("SELECT * FROM cinternet,binternet WHERE cinternet.tipoConcepto=binternet.tipoBase AND cinternet.fecha='$fecha' AND binternet.fecha='$fecha'");
-        
-        $sumaInternet=0;  $sumaRecarga=0; $sumaMinutos=0; $sumaVitrina=0;
-        $baseInternet=0;  $baseRecarga=0; $baseMInutos=0; $baseVitrina=0;
-
-        while($fila = mysql_fetch_array($resultado)){
-            if($fila['tipoConcepto'] == 'internet'){
-                 $baseInternet = $fila['baseDia'];
-                 $sumaInternet = $sumaInternet+$fila['dinero'];
-            }else{
-                if($fila['tipoConcepto'] == 'recarga'){
-                    $baseRecarga = $fila['baseDia'];
-                    $sumaRecarga = $sumaRecarga+$fila['dinero'];
-                }else{
-                    if($fila['tipoConcepto'] == 'minutos'){
-                        $baseMInutos = $fila['baseDia'];
-                        $sumaMinutos = $sumaMinutos+$fila['dinero'];
-                    }else{
-                        if($fila['tipoConcepto'] == 'vitrina'){
-                            $baseVitrina = $fila['baseDia'];
-                            $sumaVitrina = $sumaVitrina+$fila['dinero'];
-                        }
-                    }
-                }
-            }
-        }
-
-        $totalInternet = $sumaInternet + $baseInternet;
-        $totalRecargas = $sumaRecarga + $baseRecarga;
-        $totalMinutos =  $sumaMinutos + $baseMInutos;
-        $totalVitrina =  $sumaVitrina + $baseVitrina;
-
-        $salida ='<tr> 
-                        <td> $'.number_format($totalInternet).'</td>
-                        <td> $'.number_format($totalRecargas).'</td>
-                        <td> $'.number_format($totalMinutos).'</td>
-                        <td> $'.number_format($totalVitrina).'</td>
-                  </tr>';
-         echo $salida;
-    }*/
 
     public function reporteBases(){
         $resultado = mysql_query("SELECT baseDia,tipoBase FROM bases");
@@ -983,38 +1030,7 @@
         }
     }
 
-    /*CALCULO DE LOS REPORTES DE TODOS LOS DIAS POR FECHA Y TIPO*/
-    public function calcularReporte($fecha1,$fecha2,$tipo){
-        $resultado = mysql_query("SELECT sum(total) AS total FROM totalesdia WHERE fecha between'$fecha1' AND '$fecha2' AND tipo='$tipo'");
-        $fila = mysql_fetch_array($resultado);
-
-        $cierre = mysql_query("SELECT sum(dinero) AS cierre FROM cierre WHERE id between'$fecha1' AND '$fecha2'");
-        $filaCierre = mysql_fetch_array($cierre);
-
-        $result = mysql_query("SELECT sum(gasto) AS gasto FROM gastos WHERE fecha between'$fecha1' AND '$fecha2'");
-        $row = mysql_fetch_array($result);
-
-        if($tipo == 'internet'){
-              $ganancia = $filaCierre['cierre'];
-              $gasto = $row['gasto'];
-              $total = $ganancia - $gasto;
-        }else{
-            $total = $fila['total'];
-        }
-
-        if($fila['total']>0){
-           $salida = '<strong>Fecha Inicial</strong> '.$fecha1.' <strong>- Fecha Final</strong> '. $fecha2.' <h3 class="well" style="text-align: center;"> 
-                       Ganancia: <strong style="color: #df0024;">$'.number_format($filaCierre['cierre']).'</strong><br>
-                       Gastos: <strong style="color: #df0024;">$'.number_format($row['gasto']).'</strong> <br>
-                       Total Ganancia: <strong style="color: #df0024;">$'.number_format($total).'</strong></h3>';
-           echo $salida;
-           return true;
-        }else{
-            echo "Error";
-            return false;
-        }
-
-    }
+  
 
     public function cierreDia($fecha,$dinero,$dia){
         mysql_query("INSERT INTO cierre (id,dinero,dia) VALUES ('$fecha','$dinero','$dia')") 
@@ -1481,7 +1497,7 @@
         }
     }
 
-    
+
     /*MODIFICAR DATOS DEL USUAIRO Y CREAR....*/
     public function editarNombreUser($nom,$cod){
         $nom = strtolower($nom);

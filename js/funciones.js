@@ -3,6 +3,10 @@ $(document).ready(function(){
   /*_____________________________________________*/
 	$("#registrarEstudiante").validate({
 		rules:{
+      codigo:{
+        required: true,
+        number: true
+      },
 			nombre:{
 				required: true
 		    },
@@ -49,14 +53,14 @@ $(document).ready(function(){
                    success: function(resp){
                    	   console.log(resp);
                        if(resp == "Error"){
-                             setTimeout(function(){ $("#mensaje .alert").fadeOut(800).fadeIn(800).fadeOut(500).fadeIn(500).fadeOut(300);}, 1000); 
-                             var error = '<div class="alert alert-error">'+'<button type="button" class="close" data-dismiss="alert">'+'X'+'</button>'+'<strong>'+'Error'+'</strong>'+'<br> No se Pudo registrar '+'</div>';
-                             $('#mensaje .alert').remove();
-                             $('#mensaje').html(error);
+                             setTimeout(function(){ $("#mensajeError .alert").fadeOut(1000).fadeIn(800).fadeOut(500).fadeIn(500).fadeOut(300);}, 1000); 
+                             var error = '<div class="alert alert-error">'+'<button type="button" class="close" data-dismiss="alert">'+'X'+'</button>'+'<strong>'+'Error'+'</strong>'+'<br> No se Pudo registrar verifique el N° de identificacion'+'</div>';
+                             $('#mensajeError .alert').remove();
+                             $('#mensajeError').html(error);
                        }else{
                           $('#verEstu').empty();//limpiar la tabla.
 	                        $('#verEstu').html(resp);//imprimir datos de la tabla.
-	                        setTimeout(function(){ $("#mensaje .alert").fadeOut(800).fadeIn(800).fadeOut(500).fadeIn(500).fadeOut(300);}, 800); 
+	                        setTimeout(function(){ $("#mensaje .alert").fadeOut(800).fadeIn(800).fadeOut(500).fadeIn(500).fadeOut(300);}, 1000); 
 	                        var exito = '<div class="alert alert-success">'+'<button type="button" class="close" data-dismiss="alert">'+'X'+'</button>'+'<strong>'+'Registro guardado '+'</strong>'+' el registro se agrego correctamente'+'</div>';
 	                        $('#mensaje').html(exito);//impresion del mensaje exitoso.
 	                        $('.limpiar')[0].reset();///limpiamos los campos del formulario.

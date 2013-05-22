@@ -71,6 +71,11 @@
 	        margin-left: 480px;
 	        position: fixed;
        	}
+       	#mensajeError{
+       		float: left;
+	        margin-left: 680px;
+	        position: fixed;
+       	}
 	    .notas{
 	    	margin-left: 80px;
 	    	position: fixed;
@@ -146,8 +151,10 @@
 									<ul class="dropdown-menu pull-right">
 										<div class="span4" id="registrarNew">
 											<form action="includes/acciones.php" method="post" id="registrarEstudiante" style="margin-left: 30px;" class="limpiar">
+												<label>N° Identificación:</label>
+												<input type="text" name="codigo" id="foco" autofocus required>
 												<label>Nombre:</label>
-												<input type="text" name="nombre" id="foco" autofocus required/>
+												<input type="text" name="nombre" required/>
 												<label>Edad:</label>
 												<input type="text" name="edad" required/>
 												<label>Peso - Kg:</label>
@@ -182,7 +189,7 @@
 								</ul>
 							</li>
 							<li class="divider-vertical"></li>
-							<li><a href="includes/minutos.php"><i class="icon-book icon-white"></i> Reporte</a></li>
+							<li><a href="includes/reporte.php"><i class="icon-book icon-white"></i> Reporte</a></li>
 							<li class="divider-vertical"></li>
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -209,6 +216,7 @@
 		</div>
 	</header>
 		<aside id="mensaje"></aside><!--menssaje de exito del registro o de error-->
+		<aside id="mensajeError"></aside><!--menssaje de exito del registro o de error-->
 	<section>
 		<div class="container">
 			<div class="hero-unit">
