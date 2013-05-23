@@ -147,7 +147,7 @@
 								</ul>
 							</li>
 							<li class="divider-vertical"></li>
-							<li><a href="minutos.php"><i class="icon-book icon-white"></i> Reporte</a></li>
+							<li><a href="reporte.php"><i class="icon-book icon-white"></i> Reporte</a></li>
 							<li class="divider-vertical"></li>
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -158,7 +158,7 @@
 									<li><a href="registrarUsuario.php"><i class="icon-plus-sign"></i> Registrar Usuario</a></li>
 									<li class="active"><a href="#"><i class="icon-wrench"></i> Configuración de la cuenta</a></li>
 									<li class="divider"></li>
-									<li><a href="includes/cerrar.php">Cerrar Sesion</a></li>
+									<li><a href="cerrar.php">Cerrar Sesion</a></li>
 								</ul>
 							</li>
 							<li class="divider-vertical"></li>

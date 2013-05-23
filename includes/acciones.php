@@ -105,6 +105,11 @@
        $palabra = $_POST['queryTiempo'];
        $objeto->buscarEstudiantePago($palabra);
    }
+   /*buscador en tiempo real para buscar los clientes en el menu principal de todas las condiciones de pago*/
+   if(isset($_POST['queryMenu'])){
+      $palabra = $_POST['queryMenu'];
+      $objeto->buscarEstudianteMenu($palabra);
+   }
   /*actulizar el tiempo de uso del gim*/
    if(isset($_POST['modificarTiempo'])){
       $cod = $_POST['id_registro'];

@@ -10,8 +10,8 @@
 
     public function login($user,$pass){
          session_start();
-         //$truco=sha1($pass);
-         $resultado = mysql_query("SELECT * FROM usuarios WHERE nombre='$user' AND clave='$pass'");
+         $truco=sha1($pass);
+         $resultado = mysql_query("SELECT * FROM usuarios WHERE nombre='$user' AND clave='$truco'");
          $fila = mysql_fetch_array($resultado);
          if($fila>0){
          	$id_user=$fila['id'];
@@ -37,7 +37,21 @@
     }
 
     public function verEstudiantes(){
-        $resultado = mysql_query("SELECT * FROM estudiantes ORDER BY condicion, fechaFinal DESC");
+        $cant_reg = 10;//definimos la cantidad de datos que deseamos tenes por pagina.
+
+        if(isset($_GET["pagina"])){
+            $num_pag = $_GET["pagina"];//numero de la pagina
+        }else{
+            $num_pag = 1;
+        }
+
+        if(!$num_pag){//preguntamos si hay algun valor en $num_pag.
+            $inicio = 0;
+            $num_pag = 1;
+        }else{//se activara si la variable $num_pag ha resivido un valor oasea se encuentra en la pagina 2 o ha si susecivamente 
+            $inicio = ($num_pag-1)*$cant_reg;//si la pagina seleccionada es la numero 2 entonces 2-1 es = 1 por 10 = 10 empiesa a contar desde la 10 para la pagina 2 ok.
+        }
+        $resultado = mysql_query("SELECT * FROM estudiantes ORDER BY condicion, fechaFinal DESC LIMIT $inicio,$cant_reg");
 
         while($fila = mysql_fetch_array($resultado)){
             if($fila['condicion'] == 'Pago'){
@@ -77,7 +91,7 @@
             }
                           // echo $salida;
         }      
-    }
+    }/*cierre del metodo*/
 
     public function verVensimientos(){
         date_default_timezone_set('America/Bogota'); 
@@ -198,6 +212,7 @@
      /*metodos para ELIMINAR estudiantes del gim*/
     public function eliminarEstudiante($cod){
         mysql_query("DELETE FROM estudiantes WHERE codigo='$cod'");
+        mysql_query("DELETE FROM fechasclientes WHERE codigoEstudiante='$cod'");
     }
 
    /*aca comienzo con la partde de actulizar datos de los estudiantes que van al gim*/
@@ -305,7 +320,21 @@
 
 /*codigo para actulizar el tiempo del estudiante en el gim...... VA VERDATOS, PAGINACION DE LOS DATOS*/
     public function verActualizarTiempo(){
-        $resultado = mysql_query("SELECT * FROM estudiantes WHERE condicion='Pago' ORDER BY fechaFinal DESC");
+        $cant_reg = 10;//definimos la cantidad de datos que deseamos tenes por pagina.
+
+        if(isset($_GET["pagina"])){
+            $num_pag = $_GET["pagina"];//numero de la pagina
+        }else{
+            $num_pag = 1;
+        }
+
+        if(!$num_pag){//preguntamos si hay algun valor en $num_pag.
+            $inicio = 0;
+            $num_pag = 1;
+        }else{//se activara si la variable $num_pag ha resivido un valor oasea se encuentra en la pagina 2 o ha si susecivamente 
+            $inicio = ($num_pag-1)*$cant_reg;//si la pagina seleccionada es la numero 2 entonces 2-1 es = 1 por 10 = 10 empiesa a contar desde la 10 para la pagina 2 ok.
+        }
+        $resultado = mysql_query("SELECT * FROM estudiantes WHERE condicion='Pago' ORDER BY fechaFinal DESC LIMIT $inicio,$cant_reg");
 
         while($fila = mysql_fetch_array($resultado)){
                  echo '<tr class="success"> 
@@ -322,7 +351,7 @@
     }
 
     public function paginacionActulizarTiempo(){
-         $cant_reg = 10;//definimos la cantidad de datos que deseamos tenes por pagina.
+            $cant_reg = 10;//definimos la cantidad de datos que deseamos tenes por pagina.
 
             if(isset($_GET["pagina"])){
                 $num_pag = $_GET["pagina"];//numero de la pagina
@@ -348,7 +377,7 @@
                     ';
             if(($num_pag+1)<=$total_paginas){//preguntamos si el numero de la pagina es menor o = al total de paginas para que aparesca el siguiente
                 
-                echo "<ul><li class='next'> <a href='actualizarDatos.php?pagina=".($num_pag+1)."'> Next </a></li></ul>";
+                echo "<ul><li class='next'> <a href='actualizarTiempo.php?pagina=".($num_pag+1)."'> Next </a></li></ul>";
             } ;echo '
                    </div>';
     }
@@ -381,11 +410,11 @@
                     ';
             if(($num_pag+1)<=$total_paginas){//preguntamos si el numero de la pagina es menor o = al total de paginas para que aparesca el siguiente
                 
-                echo "<ul><li class='next'> <a href='reporteConcepto.php?pagina=".($num_pag+1)."'> Next </a></li></ul>";
+                echo "<ul><li class='next'> <a href='actualizarTiempo.php?pagina=".($num_pag+1)."'> Next </a></li></ul>";
             } ;echo '
                    </div>';
 
-            $resultado = mysql_query("SELECT * FROM estudiantes WHERE condicion='Pago' LIMIT $inicio,$cant_reg");//obtenemos los datos ordenados limitado con la variable inicio hasta la variable cant_reg
+            $resultado = mysql_query("SELECT * FROM estudiantes LIMIT $inicio,$cant_reg");//obtenemos los datos ordenados limitado con la variable inicio hasta la variable cant_reg
             while($fila = mysql_fetch_array($resultado)){
                    $salida = '<tr class="success"> 
                         <td>'.$fila['nombre'].'</td>
@@ -400,7 +429,7 @@
                     echo $salida;
             } 
         }else{
-             $resultado = mysql_query("SELECT * FROM estudiantes WHERE condicion='Pago' AND nombre LIKE'%$palabra%'");
+             $resultado = mysql_query("SELECT * FROM estudiantes nombre LIKE'%$palabra%'");
             //echo json_encode($resultado);
             while($fila = mysql_fetch_array($resultado)){
                    $salida = '<tr class="success"> 
@@ -418,6 +447,154 @@
         }
     }
 
+    /*buscador en tiempo real de los estudiantes o clientes en el menu principal */
+    public function buscarEstudianteMenu($palabra){
+        if($palabra == ''){
+            $cant_reg = 10;//definimos la cantidad de datos que deseamos tenes por pagina.
+
+            if(isset($_GET["pagina"])){
+                $num_pag = $_GET["pagina"];//numero de la pagina
+            }else{
+                $num_pag = 1;
+            }
+
+            if(!$num_pag){//preguntamos si hay algun valor en $num_pag.
+                $inicio = 0;
+                $num_pag = 1;
+            }else{//se activara si la variable $num_pag ha resivido un valor oasea se encuentra en la pagina 2 o ha si susecivamente 
+                $inicio = ($num_pag-1)*$cant_reg;//si la pagina seleccionada es la numero 2 entonces 2-1 es = 1 por 10 = 10 empiesa a contar desde la 10 para la pagina 2 ok.
+            }
+
+            $result = mysql_query("SELECT * FROM estudiantes");///hacemos una consulta de todos los datos de cinternet
+           
+            $total_registros=mysql_num_rows($result);//obtenesmos el numero de datos que nos devuelve la consulta
+
+            $total_paginas = ceil($total_registros/$cant_reg);
+
+            echo '<div class="pagination" style="display: none;">
+                    ';
+            if(($num_pag+1)<=$total_paginas){//preguntamos si el numero de la pagina es menor o = al total de paginas para que aparesca el siguiente
+                
+                echo "<ul><li class='next'> <a href='menu.php?pagina=".($num_pag+1)."'> Next </a></li></ul>";
+            } ;echo '
+                   </div>';
+
+            $resultado = mysql_query("SELECT * FROM estudiantes ORDER BY condicion, fechaFinal DESC LIMIT $inicio,$cant_reg");//obtenemos los datos ordenados limitado con la variable inicio hasta la variable cant_reg
+            while($fila = mysql_fetch_array($resultado)){
+                    if($fila['condicion'] == 'Pago'){
+                             echo '<tr class="success"> 
+                                     <td>'.$fila['nombre'].'</td>
+                                     <td>'.$fila['fechaInicial'].'</td>
+                                     <td style="font-weight: bold;">'.$fila['fechaFinal'].'</td>
+                                     <td>'.$fila['dinero'].'</td>
+                                     <td>'.$fila['condicion'].'</td>
+                                     <td><a disabled class="btn btn-mini btn-info"><strong disabled>Editar</strong></a></td>
+                                     <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['codigo'].'"><strong>Eliminar</strong></a></td>
+                                 </tr>';
+                    }else{
+                        if($fila['condicion'] == 'No Pago'){
+                                echo '<tr class="error"> 
+                                     <td>'.$fila['nombre'].'</td>
+                                     <td>'.$fila['fechaInicial'].'</td>
+                                     <td style="font-weight: bold;">'.$fila['fechaFinal'].'</td>
+                                     <td>'.$fila['dinero'].'</td>
+                                     <td>'.$fila['condicion'].'</td>
+                                     <td><a id="editPago" class="btn btn-mini btn-info" href="'.$fila['codigo'].'"><strong>Editar</strong></a></td>
+                                     <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['codigo'].'"><strong>Eliminar</strong></a></td>
+                                 </tr>';
+                        }else{
+                            if($fila['condicion'] == 'Abono'){
+                                        echo '<tr class="warning"> 
+                                                 <td>'.$fila['nombre'].'</td>
+                                                 <td>'.$fila['fechaInicial'].'</td>
+                                                 <td style="font-weight: bold;">'.$fila['fechaFinal'].'</td>
+                                                 <td>'.$fila['dinero'].'</td>
+                                                 <td>'.$fila['condicion'].'</td>
+                                                 <td><a id="editPago" class="btn btn-mini btn-info" href="'.$fila['codigo'].'"><strong>Editar</strong></a></td>
+                                                 <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['codigo'].'"><strong>Eliminar</strong></a></td>
+                                             </tr>';
+                            }
+                        }
+                    }
+                                      // echo $salida;
+            }/*cierre del while*/
+        }else{
+             $resultado = mysql_query("SELECT * FROM estudiantes WHERE nombre LIKE'%$palabra%'");
+            //echo json_encode($resultado);
+           while($fila = mysql_fetch_array($resultado)){
+                    if($fila['condicion'] == 'Pago'){
+                         echo '<tr class="success"> 
+                                 <td>'.$fila['nombre'].'</td>
+                                 <td>'.$fila['fechaInicial'].'</td>
+                                 <td style="font-weight: bold;">'.$fila['fechaFinal'].'</td>
+                                 <td>'.$fila['dinero'].'</td>
+                                 <td>'.$fila['condicion'].'</td>
+                                 <td><a disabled class="btn btn-mini btn-info"><strong disabled>Editar</strong></a></td>
+                                 <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['codigo'].'"><strong>Eliminar</strong></a></td>
+                             </tr>';
+                    }else{
+                        if($fila['condicion'] == 'No Pago'){
+                            echo '<tr class="error"> 
+                                 <td>'.$fila['nombre'].'</td>
+                                 <td>'.$fila['fechaInicial'].'</td>
+                                 <td style="font-weight: bold;">'.$fila['fechaFinal'].'</td>
+                                 <td>'.$fila['dinero'].'</td>
+                                 <td>'.$fila['condicion'].'</td>
+                                 <td><a id="editPago" class="btn btn-mini btn-info" href="'.$fila['codigo'].'"><strong>Editar</strong></a></td>
+                                 <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['codigo'].'"><strong>Eliminar</strong></a></td>
+                             </tr>';
+                        }else{
+                            if($fila['condicion'] == 'Abono'){
+                                echo '<tr class="warning"> 
+                                         <td>'.$fila['nombre'].'</td>
+                                         <td>'.$fila['fechaInicial'].'</td>
+                                         <td style="font-weight: bold;">'.$fila['fechaFinal'].'</td>
+                                         <td>'.$fila['dinero'].'</td>
+                                         <td>'.$fila['condicion'].'</td>
+                                         <td><a id="editPago" class="btn btn-mini btn-info" href="'.$fila['codigo'].'"><strong>Editar</strong></a></td>
+                                         <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['codigo'].'"><strong>Eliminar</strong></a></td>
+                                     </tr>';
+                            }
+                        }
+                    }
+                                  // echo $salida;
+                }/*cierre del while*/
+        }
+    }
+
+    /*paginacion de los clientes en el MENU principal */
+    public function paginacionEstudianteMenu(){
+            $cant_reg = 10;//definimos la cantidad de datos que deseamos tenes por pagina.
+
+            if(isset($_GET["pagina"])){
+                $num_pag = $_GET["pagina"];//numero de la pagina
+            }else{
+                $num_pag = 1;
+            }
+
+            if(!$num_pag){//preguntamos si hay algun valor en $num_pag.
+                $inicio = 0;
+                $num_pag = 1;
+
+            }else{//se activara si la variable $num_pag ha resivido un valor oasea se encuentra en la pagina 2 o ha si susecivamente 
+                $inicio = ($num_pag-1)*$cant_reg;//si la pagina seleccionada es la numero 2 entonces 2-1 es = 1 por 10 = 10 empiesa a contar desde la 10 para la pagina 2 ok.
+            }
+
+            $result = mysql_query("SELECT * FROM estudiantes");///hacemos una consulta de todos los datos de cinternet
+           
+            $total_registros=mysql_num_rows($result);//obtenesmos el numero de datos que nos devuelve la consulta
+
+            $total_paginas = ceil($total_registros/$cant_reg);
+
+            echo '<div class="pagination" style="display: none;">
+                    ';
+            if(($num_pag+1)<=$total_paginas){//preguntamos si el numero de la pagina es menor o = al total de paginas para que aparesca el siguiente
+                
+                echo "<ul><li class='next'> <a href='menu.php?pagina=".($num_pag+1)."'> Next </a></li></ul>";
+            } ;echo '
+                   </div>';
+    }
+
     public function actulizarTiempo($fechaV,$pago,$con,$cod){
         date_default_timezone_set('America/Bogota'); 
         $fechaI = date("Y-m-d");
@@ -428,7 +605,7 @@
 
     /*CALCULO DE LOS REPORTES DE GANANCIAS POR FECHA*/
     public function calcularReporte($fecha1,$fecha2){
-        $resultado = mysql_query("SELECT sum(dinero) AS total FROM fechasClientes WHERE fechaInicial AND fechaFinal between'$fecha1' AND '$fecha2'");
+        $resultado = mysql_query("SELECT sum(dinero) AS total FROM fechasClientes WHERE condicion='Pago' AND fechaInicial AND fechaFinal between'$fecha1' AND '$fecha2'");
         $fila = mysql_fetch_array($resultado);
             $salida = '<h3 class="well"> Calculo: $'.number_format($fila['total']).'</h3>';
             echo $salida;     
@@ -438,64 +615,134 @@
     public function calculosMes(){
         $resultado = mysql_query("SELECT * FROM fechasClientes WHERE condicion='Pago'");
          $conE = 0; $conF=0; $conM=0; $conA=0; $conMy=0; $conJ=0;
+         $conJl=0; $conAg=0; $conS=0; $conO=0; $conN=0; $conD=0;
         while($fila = mysql_fetch_array($resultado)){
                     $fecha1 = $fila['fechaInicial'];
                     $fecha2 = $fila['fechaFinal'];
 
                 $mes = substr($fecha1,5,-3);
 
+                /*tener en cuenta la fecha2 por el mes que se pasa*/
+                $año = substr($fecha1,0,4);
+
                     $resul = mysql_query("SELECT sum(dinero) AS total FROM fechasClientes
-                                         WHERE condicion='Pago' AND fechaInicial AND fechaFinal between'$fecha1' AND '$fecha2'");
+                                        WHERE condicion='Pago' AND fechaInicial AND fechaFinal between'$fecha1' AND '$fecha2'");
                     $fila2 = mysql_fetch_array($resul);
 
                 if($mes=='01' and $conE==0){
                     $mes="Enero";
                       echo '<tr> 
+                                <td>'.$año.'</td>
                                 <td>'.$mes.'</td>
-                                <td>'.$fila2['total'].'</td>
+                                <td>$'.number_format($fila2['total']).'</td>
                             </tr>';
                             $conE++;
                 }else{
                     if($mes=='02' and $conF==0){
                         $mes="Febrero";
-                        echo '<tr> 
+                        echo '<tr>
+                                <td>'.$año.'</td> 
                                 <td>'.$mes.'</td>
-                                <td>'.$fila2['total'].'</td>
+                                <td>$'.number_format($fila2['total']).'</td>
                             </tr>';
                         $conF++;
                     }
                     else{
                         if($mes=='03' and $conM==0){
                             $mes="Marzo";
-                            echo '<tr> 
+                            echo '<tr>
+                                    <td>'.$año.'</td> 
                                     <td>'.$mes.'</td>
-                                    <td>'.$fila2['total'].'</td>
+                                    <td>$'.number_format($fila2['total']).'</td>
                                 </tr>';
                             $conM++;
                         }else{
                             if($mes=='04' and $conA==0){
                                 $mes="Abril";
-                                echo '<tr> 
+                                echo '<tr>
+                                        <td>'.$año.'</td> 
                                         <td>'.$mes.'</td>
-                                        <td>'.$fila2['total'].'</td>
+                                        <td>$'.number_format($fila2['total']).'</td>
                                     </tr>';
                                 $conA++;
                             }else{
                                 if($mes=='05' and $conMy==0){
                                     $mes='Mayo';
-                                    echo '<tr> 
+                                    echo '<tr>
+                                            <td>'.$año.'</td> 
                                             <td>'.$mes.'</td>
-                                            <td>'.$fila2['total'].'</td>
+                                            <td>$'.number_format($fila2['total']).'</td>
                                         </tr>';
                                     $conMy++;
                                 }else{
                                     if($mes=='06' and $conJ==0){
                                         $mes = 'Junio';
-                                        echo '<tr> 
-                                                <td>'.$mes.'</td>
-                                                <td>'.$fila2['total'].'</td>
-                                            </tr>';
+                                        echo '<tr>
+                                                  <td>'.$año.'</td> 
+                                                  <td>'.$mes.'</td>
+                                                  <td>$'.number_format($fila2['total']).'</td>
+                                               </tr>';
                                         $conJ++;
+                                    }else{
+                                        if($mes=='07' and $conJl==0){
+                                            $mes = 'Julio';
+                                            echo '<tr>
+                                                      <td>'.$año.'</td> 
+                                                      <td>'.$mes.'</td>
+                                                      <td>$'.number_format($fila2['total']).'</td>
+                                                   </tr>';
+                                            $conJl++;
+                                        }else{
+                                            if($mes=='08' and $conAg==0){
+                                                $mes = 'Agosto';
+                                                echo '<tr>
+                                                          <td>'.$año.'</td> 
+                                                          <td>'.$mes.'</td>
+                                                          <td>$'.number_format($fila2['total']).'</td>
+                                                       </tr>';
+                                                $conAg++;
+                                            }else{
+                                                if($mes=='09' and $conS==0){
+                                                    $mes = 'Septiembre';
+                                                    echo '<tr>
+                                                              <td>'.$año.'</td> 
+                                                              <td>'.$mes.'</td>
+                                                              <td>$'.number_format($fila2['total']).'</td>
+                                                           </tr>';
+                                                    $conS++;
+                                                }else{
+                                                    if($mes=='10' and $conO==0){
+                                                        $mes = 'Octubre';
+                                                        echo '<tr>
+                                                                  <td>'.$año.'</td> 
+                                                                  <td>'.$mes.'</td>
+                                                                  <td>$'.number_format($fila2['total']).'</td>
+                                                               </tr>';
+                                                        $conO++;
+                                                    }else{
+                                                        if($mes=='11' and $conN==0){
+                                                            $mes = 'Noviembre';
+                                                            echo '<tr>
+                                                                      <td>'.$año.'</td> 
+                                                                      <td>'.$mes.'</td>
+                                                                      <td>$'.number_format($fila2['total']).'</td>
+                                                                   </tr>';
+                                                            $conN++;
+                                                        }else{
+                                                            if($mes=='12' and $conD==0){
+                                                                $mes = 'Diciembre';
+                                                                echo '<tr>
+                                                                          <td>'.$año.'</td> 
+                                                                          <td>'.$mes.'</td>
+                                                                          <td>$'.number_format($fila2['total']).'</td>
+                                                                       </tr>';
+                                                                $conD++;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }

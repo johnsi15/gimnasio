@@ -6,6 +6,7 @@
 	<link rel="stylesheet" href="../css/bootstrap.css">
 	<link rel="stylesheet" href="../css/estilos.css">
 	<script src="../js/jquery.js"></script>
+	<script src="../js/jquery.validate.js"></script>
 	<script src="../js/bootstrap.js"></script>
 	<script src="../js/buscar.js"></script>
 	<script src="../js/calculos.js"></script>
@@ -18,12 +19,12 @@
 		h1{
 			text-align: center;
 		}
-		tr{
-			font-size: 21px;
-		}
-		td{
-			font-size: 18px;
-		}
+		th{
+	    	font-size: 24px;
+	    }
+	    td{
+	    	font-size: 20px;
+	    }
 		p{
 	    	color: #df0024;
 	    	font-size: 20px;
@@ -64,7 +65,8 @@
 		        $("#formMenu").addClass('open');
 		        $("#foco").focus();
 	        });
-	  });
+
+	  });//cierre del document
 	</script>
 	<?php
       session_start();
@@ -102,7 +104,7 @@
 												<label>N° Identificación:</label>
 												<input type="text" name="codigo" id="foco" autofocus required>
 												<label>Nombre:</label>
-												<input type="text" name="nombre" id="foco" autofocus required/>
+												<input type="text" name="nombre" required/>
 												<label>Edad:</label>
 												<input type="text" name="edad" required/>
 												<label>Peso - Kg:</label>
@@ -190,25 +192,28 @@
 					<h3 class="well">Calculo: </h3>
 				</div>
 		</div>
-		<div class="row">
-			<div class="span3"></div>
-			<div class="span6">
-				<table class="table table-hover table-bordered">
-					<thead>
-						<tr>
-							<th>Mes</th>
-							<th>Ganancias</th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php
-						  require_once('funciones.php');
-						  $objeto = new funciones();
-						  $objeto->calculosMes(); 
-						?>
-					</tbody>
-				</table>
-			</div>
+		<hr>
+	    <div class="row">
+				<div class="span3"></div>
+				<div class="span6 well" id="fondo">
+					<p id="titulo">Ganancias por Mes</p><br><br>
+					<table class="table table-hover table-bordered">
+						<thead>
+							<tr>
+								<th>Año</th>
+								<th>Mes</th>
+								<th>Ganancias</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php
+							  require_once('funciones.php');
+							  $objeto = new funciones();
+							  $objeto->calculosMes(); 
+							?>
+						</tbody>
+					</table>
+				</div>
 		</div>
 	</article>
 

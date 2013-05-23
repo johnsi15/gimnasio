@@ -90,6 +90,34 @@
 
 	<script>
       $(document).ready(function(){
+
+      	var menu = $('#bloque');
+		var contenedor = $('#bloque-contenedor');
+		var menu_offset = menu.offset();
+		  // Cada vez que se haga scroll en la página
+		  // haremos un chequeo del estado del menú
+		  // y lo vamos a alternar entre 'fixed' y 'static'.
+		  menu.css("display", "none");
+		$(window).on('scroll', function() {
+		    if($(window).scrollTop() > menu_offset.top) {
+		      menu.addClass('bloqueFijo');
+		      menu.css("display", "block");
+		    } else {
+		      menu.removeClass('bloqueFijo');
+		      menu.css("display", "none");
+		    }
+		});
+
+		/*____________________________________________________-*/
+		$('#IrInicio').click(function () {
+		    $('html, body').animate({
+		           scrollTop: '0px'
+		    },
+		    1500);
+		        $('#buscar').focus();
+		       //return false;
+		});
+
 		
          /*____________________________________________-*/
          $('.cerrar').click(function(){
@@ -108,13 +136,59 @@
          	// alert("Bien");
          });
 
+           /*_______________________________________________*/
+	    $('#buscar').live('keyup',function(){
+		  	var data = 'queryMenu='+$(this).val();
+		  	//console.log(data);
+      	    if(data =='queryMenu=' ){
+      	       	$.post('includes/acciones.php',data , function(resp){
+			  	   	//console.log(resp);
+			  	   	$('#verEstu').empty();//limpiar los datos
+			  	   	$('#verEstu').html(resp);
+	      	    	console.log('poraca paso joder....');
+			  	},'html');
+      	    }else{
+      	       	$.post('includes/acciones.php',data , function(resp){
+			  	   	  //console.log(resp);
+			  	   	$('.pagination').remove();
+			  	   	$('#verEstu').empty();//limpiar los datos
+			  	   	$('#verEstu').html(resp);
+	      	    	console.log(resp);
+			  	},'html');
+      	    }
+		});
+
          /*______________________________________________*/
-        	 $("#menuOpen").mouseout(function(){
+        $("#menuOpen").mouseout(function(){
             //$("#formMenu").removeClass('open');
-	        }).mouseover(function(){
-	            $("#formMenu").addClass('open');
-	            $("#foco").focus();
-	        });
+	    }).mouseover(function(){
+	        $("#formMenu").addClass('open');
+	        $("#foco").focus();
+	    });
+
+	   /*________________________________________________________________________*/
+		$(window).scroll(function(){
+		  	if($(window).scrollTop() >= $(document).height() - $(window).height()){
+		  		if($('.pagination ul li.next a').length){
+			  		$('#cargando').show();
+			  		 /*_____________________________________*/
+					$.ajax({
+					  	type: 'GET',
+					  	url: $('.pagination ul li.next a').attr('href'),
+					  	success: function(html){
+					  	 		//console.log(html);
+					  	 	var nuevosGastos = $(html).find('table tbody'),
+					  	 		nuevaPag     = $(html).find('.pagination'),
+					  	 		tabla        = $('table');
+					  	    tabla.find('tbody').append(nuevosGastos.html());
+					  	 	tabla.after(nuevaPag.hide());
+					  	 	$('#cargando').hide();
+					  	}
+					});
+					  $('.pagination').remove();
+				}
+		  	}
+		});
 
 	  });//cierre del document
 	</script>
@@ -217,6 +291,7 @@
 	</header>
 		<aside id="mensaje"></aside><!--menssaje de exito del registro o de error-->
 		<aside id="mensajeError"></aside><!--menssaje de exito del registro o de error-->
+
 	<section>
 		<div class="container">
 			<div class="hero-unit">
@@ -224,8 +299,12 @@
 			</div>
 		</div>
 	</section>
+
+   <div class="span2"> <div id="bloque"><aside class="well" id="bloque-contenedor" style="text-align: center; "><a href="#" id="IrInicio">Volver Arriba</a></aside></div></div> 
+
     <!--Primer articulo... -->
 	<article class="container well" id="fondo">
+		<input type="text" name="buscar" id="buscar" class="search-query" placeholder="Buscar Nombre" autofocus>
 		<div class="row">         
 			<h1>Fechas de vencimientos y Pagos</h1><br>
 			<div class="span12">
@@ -247,6 +326,14 @@
 						?>
 					</tbody>
 				</table>
+				<div id="cargando" style="display: none;"><img src="img/loader.gif" alt=""></div>
+		        <div id="paginacion">
+		    	 	 <?php 
+		    	 	  require_once('includes/funciones.php');
+		    	 	  $objeto = new funciones();
+		    	 	  $objeto->paginacionEstudianteMenu();
+			    	 ?>
+		    	</div>
 			</div>
 		</div>
 		<div class="row">
