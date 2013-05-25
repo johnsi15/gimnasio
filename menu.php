@@ -47,14 +47,19 @@
 	    }
 	    #aviso{
 	    	float: left;
-	    	margin-left: 185px;
+	    	margin-left: 29%;
 	    	position: fixed;
 	    	top: 18%;
 	    	display: block;
 	    	background: rgba(255,255,255,0.9);
 	    	box-shadow: 1px 1px 5px #000;
+	    	width: 45%;
+	    	height: 40%;
+	    	border-radius: 25px;
 	    }
 	    #cerrar{
+	        padding: 35px; 
+	    	/* margin: auto; */
 	    	text-align: right;
 	    	font-weight: bold;
 	    	font-size: 38px;
@@ -75,6 +80,10 @@
        		float: left;
 	        margin-left: 680px;
 	        position: fixed;
+       	}
+       	#ver{
+       		margin-left: 43%;
+       		margin-top: 6%;
        	}
 	    .notas{
 	    	margin-left: 80px;
@@ -124,7 +133,7 @@
          	 //$('#aviso').css("display","none");
          	$('#aviso').fadeOut("slow");
 
-         	var data = 'verEstu='+'bien';
+         	/*var data = 'verEstu='+'bien';
              console.log(data);
       	    $.post('includes/acciones.php',data , function(resp){
 			  	   	  //console.log(resp);
@@ -133,7 +142,7 @@
 			  	console.log(resp);
 	      	    console.log('poraca paso joder....');
 			},'html');
-         	// alert("Bien");
+         	// alert("Bien");*/
          });
 
            /*_______________________________________________*/
@@ -260,6 +269,7 @@
 								<ul class="dropdown-menu">
 									<li><a href="includes/actualizarDatos.php">Actualizar Datos Personales</a></li>
 									<li><a href="includes/actualizarTiempo.php">Actualizar Tiempo</a></li>
+									<li><a href="includes/pagoTiempo.php">Deben Pagar</a></li>
 								</ul>
 							</li>
 							<li class="divider-vertical"></li>
@@ -361,26 +371,6 @@
      	</form>
      </div>
 
-    <!--modificamos los pagos que se vencieron-->
-     <div class="hide" id="editarPagoVencimiento" title="Editar Registro">
-     	<form action="includes/acciones.php" method="post">
-     		<input type="hidden" id="id_registroVen" name="id_registroVen" value="0">
-     			<label>Nombre:</label>
-				<input type="text" name="nombre" id="nombreVen" disabled/>
-     			<label>Pago:</label>
-				<input type="text" name="pago" id="pagoVen" autofocus/>
-				<label>Condición:</label>
-				<select name="condicion" id="conVen">
-					<option value="No Pago">No Pago</option>
-					<option value="Pago">Pago</option>
-					<option value="Abono">Abono</option>
-				</select>
-				<input type="hidden" name="modificarPagoVen">
-				<button type="submit" id="modificarPagoVen" class="btn btn-success">Modificar</button>
-				<button id="cancelar" class="btn btn-danger">Cancelar</button>
-     	</form>
-     </div>
-
     <!--Aca va el codigo para eliminar-->
     <div class="hide" id="deleteReg" title="Eliminar Estudiante">
 	    <form action="includes/acciones.php" method="post">
@@ -403,27 +393,11 @@
 		$objeto = new funciones();
 		if($objeto->verificar()){
 			?>
-			<div id="aviso" class="container well">
+
+			<div id="aviso">
 				<div id="cerrar"><a class="btn btn-inverse cerrar">X</a></div>
-					<h1 style='color: #df0024;'>Deben Pagar</h1><br>
-				<table  class="table table-hover table-bordered">
-					<thead>
-						<tr>
-							<th>Nombre</th>
-							<th>Fecha Inicial</th>
-							<th>Fecha Vencimiento</th>
-							<th>Pago</th>
-							<th>Condición</th>
-						</tr>
-					</thead>
-					<tbody id="verVencimiento">
-						<?php 
-							require_once('includes/funciones.php');
-							$objeto = new funciones();
-							$objeto->verVensimientos();
-						?>
-					</tbody>
-				</table>
+				<h1 style='color: #df0024;'>Clientes que deben Pagar</h1>
+				<a href="includes/pagoTiempo.php" id="ver" class="btn btn-inverse btn-large cerrar">VER</a>
 			</div>
 	<?php
 		}

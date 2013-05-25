@@ -59,6 +59,7 @@
    /*refrescar la tabla al cerrar la ventana de los que se les vencio las fechas de pago*/
    if(isset($_POST['verEstu'])){
        $objeto->verEstudiantes();
+       $objeto->paginacionEstudianteMenu();
    }
 
 
@@ -110,6 +111,13 @@
       $palabra = $_POST['queryMenu'];
       $objeto->buscarEstudianteMenu($palabra);
    }
+   /*buscador en tiempo real para los pagos que se vencieron*/
+   if(isset($_POST['queryPago'])){
+      $palabra = $_POST['queryPago'];
+      $objeto->buscarVencimientos($palabra);
+   }
+
+
   /*actulizar el tiempo de uso del gim*/
    if(isset($_POST['modificarTiempo'])){
       $cod = $_POST['id_registro'];

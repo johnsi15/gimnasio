@@ -29,6 +29,13 @@
 	    	color: #df0024;
 	    	font-size: 20px;
 	    }
+	    label.error{
+			float: none; 
+			color: red; 
+			padding-left: .5em;
+		    vertical-align: middle;
+		    font-size: 12px;
+		}
 		#fondo{
 			background: #feffff;
 		}
@@ -135,7 +142,8 @@
 								</a>
 								<ul class="dropdown-menu">
 									<li><a href="actualizarDatos.php">Actualizar Datos Personales</a></li>
-									<li><a href="#">Actualizar Tiempo</a></li>
+									<li><a href="actualizarTiempo.php">Actualizar Tiempo</a></li>
+									<li><a href="pagoTiempo.php">Deben Pagar</a></li>
 								</ul>
 							</li>
 							<li class="divider-vertical"></li>
