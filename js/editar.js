@@ -103,7 +103,10 @@ $(document).ready(function(){
             var condicion =$(this).parent().parent().children('td:eq(4)').text();
             $('#conVen option[value="'+condicion+'"]').attr('selected',true);
       });
-      /*___________*/
+      /*__________________________________________________________________________*/
+      var petVen = $('#editarPagoVencimiento form').attr('action');
+      var metVen = $('#editarPagoVencimiento form').attr('method');
+
       $('#editarPagoVencimiento form').on('click','#modificarPagoVen',function(e){
       	    e.preventDefault();
 
@@ -111,8 +114,8 @@ $(document).ready(function(){
       	    	beforeSend: function(){
 
       	    	},
-      	    	url: pet,
-      	    	type: met,
+      	    	url: petVen,
+      	    	type: metVen,
       	    	data: $('#editarPagoVencimiento form').serialize(),
       	    	success: function(resp){
       	    		console.log(resp);
