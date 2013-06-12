@@ -131,7 +131,8 @@
       $objeto->actulizarTiempo($fechaV,$pago,$con,$cod);
       $objeto->paginacionActulizarTiempo();
       $objeto->verActualizarTiempo();
-      $objeto->registrarFechasEstudiante($nom,$fechaI,$fechaV,$pago,$con,$cod);
+      $mes = substr($fechaV,5,-3);
+      $objeto->registrarFechasEstudiante($nom,$fechaI,$fechaV,$mes,$pago,$con,$codigo);
    }
 
 
