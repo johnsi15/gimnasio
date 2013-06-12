@@ -31,7 +31,8 @@
         $con = $_POST['condicion'];
         $objeto->registrarEstudiante($codigo,$nom,$edad,$peso,$altura,$fechaI,$fechaV,$pago,$con);
         $objeto->verEstudiantes();
-        $objeto->registrarFechasEstudiante($nom,$fechaI,$fechaV,$pago,$con,$codigo);
+        $mes = substr($fechaV,5,-3);
+        $objeto->registrarFechasEstudiante($nom,$fechaI,$fechaV,$mes,$pago,$con,$codigo);
    }
 
    /*modificamos el pago de algunos de los estudiantes */

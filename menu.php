@@ -326,6 +326,7 @@
 							<th>Fecha Vencimiento</th>
 							<th>Pago</th>
 							<th>Condición</th>
+							<th>Dias</th>
 						</tr>
 					</thead>
 					<tbody id="verEstu">

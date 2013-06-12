@@ -30,9 +30,31 @@
                                       or die ("Error");
     }
 
-    public function registrarFechasEstudiante($nom,$fechaI,$fechaV,$pago,$con,$codigo){
-            $resultado = mysql_query("INSERT INTO fechasclientes (nombre,fechaInicial,fechaFinal,dinero,condicion,codigoEstudiante)
-                                      VALUES ('$nom','$fechaI','$fechaV','$pago','$con','$codigo')")
+    public function registrarFechasEstudiante($nom,$fechaI,$fechaV,$mes,$pago,$con,$codigo){
+            
+            $mes1 = substr($fechaI,5,-3);
+            $año1 = substr($fechaI,0,4);
+            $dia1 = substr($fechaI, 8,10);
+            /*________________________________________*/
+            $mes2 = substr($fechaV, 5, -3);
+            $año2 = substr($fechaV, 0,4);
+            $dia2 = substr($fechaV, 8,10);
+            //calculo timestam de las dos fechas 
+            $timestamp1 = mktime(0,0,0,$mes1,$dia1,$año1); 
+            $timestamp2 = mktime(0,0,0,$mes2,$dia2,$año2);
+            //resto a una fecha la otra 
+            $segundos_diferencia = $timestamp1 - $timestamp2; 
+            //echo $segundos_diferencia; 
+
+            //convierto segundos en días 
+            $dias_diferencia = $segundos_diferencia / (60 * 60 * 24); 
+            //obtengo el valor absoulto de los días (quito el posible signo negativo) 
+            $dias_diferencia = abs($dias_diferencia); 
+            //quito los decimales a los días de diferencia 
+            $dias_diferencia = floor($dias_diferencia);
+
+            $resultado = mysql_query("INSERT INTO fechasclientes (nombre,fechaInicial,fechaFinal,mes,dias,dinero,condicion,codigoEstudiante)
+                                      VALUES ('$nom','$fechaI','$fechaV','$mes','$dias_diferencia','$pago','$con','$codigo')")
                                       or die ("problemas con el insert de concepto de internet".mysql_error());
     }
 
@@ -54,6 +76,10 @@
         $resultado = mysql_query("SELECT * FROM estudiantes ORDER BY condicion, fechaFinal DESC LIMIT $inicio,$cant_reg");
 
         while($fila = mysql_fetch_array($resultado)){
+            $codigo = $fila['codigo'];
+            $result = mysql_query("SELECT sum(dias) AS total FROM fechasclientes WHERE codigoEstudiante = '$codigo' ");
+            $dias = mysql_fetch_array($result);
+
             if($fila['condicion'] == 'Pago'){
                  echo '<tr class="success"> 
                          <td>'.$fila['nombre'].'</td>
@@ -61,6 +87,7 @@
                          <td style="font-weight: bold;">'.$fila['fechaFinal'].'</td>
                          <td>'.$fila['dinero'].'</td>
                          <td>'.$fila['condicion'].'</td>
+                         <td>'.$dias['total'].'</td>
                          <td><a disabled class="btn btn-mini btn-info"><strong disabled>Editar</strong></a></td>
                          <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['codigo'].'"><strong>Eliminar</strong></a></td>
                      </tr>';
@@ -72,6 +99,7 @@
                          <td style="font-weight: bold;">'.$fila['fechaFinal'].'</td>
                          <td>'.$fila['dinero'].'</td>
                          <td>'.$fila['condicion'].'</td>
+                         <td>'.$dias['total'].'</td>
                          <td><a id="editPago" class="btn btn-mini btn-info" href="'.$fila['codigo'].'"><strong>Editar</strong></a></td>
                          <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['codigo'].'"><strong>Eliminar</strong></a></td>
                      </tr>';
@@ -83,6 +111,7 @@
                                  <td style="font-weight: bold;">'.$fila['fechaFinal'].'</td>
                                  <td>'.$fila['dinero'].'</td>
                                  <td>'.$fila['condicion'].'</td>
+                                 <td>'.$dias['total'].'</td>
                                  <td><a id="editPago" class="btn btn-mini btn-info" href="'.$fila['codigo'].'"><strong>Editar</strong></a></td>
                                  <td><a id="delete" class="btn btn-mini btn-danger" href="'.$fila['codigo'].'"><strong>Eliminar</strong></a></td>
                              </tr>';
@@ -887,7 +916,7 @@
                 $año = substr($fecha1,0,4);
 
                     $resul = mysql_query("SELECT sum(dinero) AS total FROM fechasclientes
-                                        WHERE condicion='Pago' AND fechaInicial AND fechaFinal between'$fecha1' AND '$fecha2'");
+                                        WHERE condicion='Pago' AND mes='$mes'");
                     $fila2 = mysql_fetch_array($resul);
 
                 if($mes=='01' and $conE==0){
@@ -942,8 +971,8 @@
                                                   <td>'.$año.'</td> 
                                                   <td>'.$mes.'</td>
                                                   <td>$'.number_format($fila2['total']).'</td>
-                                               </tr>';
-                                        $conJ++;
+                                            </tr>';
+                                        //$conJ++;
                                     }else{
                                         if($mes=='07' and $conJl==0){
                                             $mes = 'Julio';
